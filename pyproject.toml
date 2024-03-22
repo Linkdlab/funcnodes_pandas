@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "funcnodes-pandas"
+version = "0.1.0"
+description = ""
+authors = ["Julian Kimmig <julian.kimmig@gmx.net>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+funcnodes = "^0.1.10"
+pandas = "^2.2.1"
+funcnodes-numpy = "^0.1.2"
+
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.1.1"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
