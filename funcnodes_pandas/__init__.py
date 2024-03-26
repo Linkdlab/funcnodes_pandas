@@ -30,9 +30,12 @@ from .dataseries import (
 )
 
 
-def encode_pdDf(obj):
+def encode_pdDf(obj, preview=False):
     if isinstance(obj, pd.DataFrame):
-        return obj.to_dict(orient="split"), True
+        if preview:
+            return obj.head().to_dict(orient="split"), True
+        else:
+            return obj.to_dict(orient="split"), True
     if isinstance(obj, pd.Series):
         return obj.to_list(), True
     return obj, False
@@ -55,6 +58,7 @@ FUNCNODES_RENDER_OPTIONS: fn.RenderOptions = {
     },
 }
 
+__version__ = "0.1.1"
 
 __all__ = [
     "NODE_SHELF",
