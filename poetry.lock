@@ -469,13 +469,13 @@ typing = ["typing-extensions (>=4.8)"]
 
 [[package]]
 name = "funcnodes"
-version = "0.1.14"
+version = "0.1.15"
 description = "funcnodes"
 optional = false
 python-versions = "<4.0,>=3.9"
 files = [
-    {file = "funcnodes-0.1.14-py3-none-any.whl", hash = "sha256:9ecd86acdc1e7e184f3ea44ac7fab80b7a82c181a0b80c4333ee9d9a7478d7c6"},
-    {file = "funcnodes-0.1.14.tar.gz", hash = "sha256:b0d52c13ce0d7e7fd8e27b5d26118c5f768ce512ba1c386223e9feec688230d3"},
+    {file = "funcnodes-0.1.15-py3-none-any.whl", hash = "sha256:795014e6ae6e735d3c793238169c6d1538bec14e33e35d64da980be5bea734da"},
+    {file = "funcnodes-0.1.15.tar.gz", hash = "sha256:6379cf7b84c5c6dcdb8fb20270705991ca2b4cf927ce5d74aa6d0f00afea6106"},
 ]
 
 [package.dependencies]
@@ -487,13 +487,13 @@ websockets = ">=12.0,<13.0"
 
 [[package]]
 name = "funcnodes-numpy"
-version = "0.1.3"
+version = "0.1.4"
 description = ""
 optional = false
 python-versions = "<4.0,>=3.9"
 files = [
-    {file = "funcnodes_numpy-0.1.3-py3-none-any.whl", hash = "sha256:3204b822e55ac2ca6b91dabff15e5c7b855a939f92a1ec8dbd0010e821f2a4b7"},
-    {file = "funcnodes_numpy-0.1.3.tar.gz", hash = "sha256:f822d3253bf80d2b735edaf09c5c67a600e2f0f62375faef2fdae1b4a68efce7"},
+    {file = "funcnodes_numpy-0.1.4-py3-none-any.whl", hash = "sha256:4898ecabe8b29560ef6b102270085307bac21faf12bd0de34dfc29c3143f5b07"},
+    {file = "funcnodes_numpy-0.1.4.tar.gz", hash = "sha256:d0b31a534888413f101af4714ce304fc575d1212b7c614642b99331382e2ea86"},
 ]
 
 [package.dependencies]
