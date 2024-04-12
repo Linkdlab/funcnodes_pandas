@@ -16,6 +16,7 @@ from .dataframe import (
     df_loc,
     to_csv_str,
     df_from_array,
+    DfFromExcelNode,
 )
 
 from .dataseries import (
@@ -81,4 +82,5 @@ __all__ = [
     "DF_SHELF",
     "to_csv_str",
     "df_from_array",
+    "DfFromExcelNode"
 ]

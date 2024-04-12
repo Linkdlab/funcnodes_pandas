@@ -162,6 +162,33 @@ def from_csv_str(
     return pandas.read_csv(StringIO(source), sep=sep, decimal=decimal)
 
 
+class DfFromExcelNode(fn.Node):
+    node_id = "pd.df_from_xlsx"
+    node_name = "From Excel"
+
+    data = fn.NodeInput(
+        id="data",
+        type=bytes,
+    )
+    sheet = fn.NodeInput(
+        id="sheet",
+        type=str,
+        default=None,
+        required=False,
+    )
+
+    df = fn.NodeOutput(id="df", type=pandas.DataFrame)
+
+    async def func(self, data: bytes, sheet: str = None):
+        # get sheet names
+        sheets = pandas.ExcelFile(data).sheet_names
+        self.inputs["sheet"].value_options = {s: s for s in sheets}
+        if sheet is None or sheet not in sheets:
+            sheet = sheets[0]
+        self.inputs["sheet"].set_value(sheet, does_trigger=False)
+        self.outputs["df"].value = pandas.read_excel(data, sheet_name=sheet)
+
+
 @fn.NodeDecorator(
     node_id="pd.df_to_csv_str",
     name="To CSV",
@@ -293,6 +320,7 @@ NODE_SHELF = fn.Shelf(
         df_loc,
         df_iloc,
         df_from_array,
+        DfFromExcelNode,
     ],
     name="Datataframe",
     description="Pandas DataFrame nodes",
