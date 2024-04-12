@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "funcnodes-pandas"
-version = "0.1.1"
+version = "0.1.2"
 description = ""
 authors = ["Julian Kimmig <julian.kimmig@gmx.net>"]
 license = "MIT"
@@ -8,9 +8,9 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.9"
-funcnodes = "^0.1.10"
+funcnodes = "^0.1.30"
 pandas = "^2.2.1"
-funcnodes-numpy = "^0.1.2"
+funcnodes-numpy = "^0.1.51"
 openpyxl = "^3.1.2"
 
 

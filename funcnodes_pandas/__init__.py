@@ -59,7 +59,7 @@ FUNCNODES_RENDER_OPTIONS: fn.RenderOptions = {
     },
 }
 
-__version__ = "0.1.1"
+__version__ = "0.1.2"
 
 __all__ = [
     "NODE_SHELF",
@@ -82,5 +82,5 @@ __all__ = [
     "DF_SHELF",
     "to_csv_str",
     "df_from_array",
-    "DfFromExcelNode"
+    "DfFromExcelNode",
 ]
