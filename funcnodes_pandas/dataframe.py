@@ -249,11 +249,14 @@ class GetColumnNode(fn.Node):
 
     def _update_columns(self, **kwargs):
         try:
-            self.get_input("column").value_options = {
-                c: c for c in self.get_input("df").value.columns
-            }
+            df = self.get_input("df").value
+            col = self.get_input("column")
+        except KeyError:
+            return
+        try:
+            col.update_value_options(options=list(df.columns))
         except Exception:
-            self.get_input("column").value_options = {}
+            col.update_value_options(options=[])
 
     async def func(
         self,
@@ -264,19 +267,54 @@ class GetColumnNode(fn.Node):
         return df[column]
 
 
-@fn.NodeDecorator(
-    node_id="pd.df_loc",
-    name="Get Row",
-    description="Gets a row from a DataFrame by label.",
-    outputs=[{"name": "row", "type": pandas.Series}],
-)
-def df_loc(
-    df: pandas.DataFrame,
-    label: Union[str],
-) -> pandas.Series:
-    # taransform label to the correct type
-    label = df.index.to_list()[0].__class__(label)
-    return df.loc[label]
+class GetRowNode(fn.Node):
+    node_id = "pd.df_loc"
+    node_name = "Get Row"
+    description = "Gets a row from a DataFrame by label."
+    df = fn.NodeInput(
+        "DataFrame",
+        type=pandas.DataFrame,
+        uuid="df",
+    )
+
+    row = fn.NodeInput(
+        "Row",
+        type=str,
+        uuid="row",
+    )
+
+    series = fn.NodeOutput(
+        "Series",
+        type=pandas.Series,
+        uuid="series",
+    )
+
+    def __init__(self):
+        super().__init__()
+        self.get_input("df").on("after_set_value", self._update_rows)
+
+    def _update_rows(self, **kwargs):
+        try:
+            df = self.get_input("df").value
+            row = self.get_input("row")
+        except KeyError:
+            return
+        try:
+            row.update_value_options(options=list(df.index))
+        except Exception:
+            row.update_value_options(options=[])
+
+    async def func(
+        self,
+        df: pandas.DataFrame,
+        row: str,
+    ) -> pandas.Series:
+        if len(df.index) == 0:
+            return pandas.Series(index=df.columns)
+        label = df.index.to_list()[0].__class__(row)
+        ser = df.loc[label]
+        self.get_output("series").value = ser
+        return ser
 
 
 @fn.NodeDecorator(
@@ -308,6 +346,78 @@ def df_from_array(
     return pandas.DataFrame(data, columns=columns, index=index)
 
 
+@fn.NodeDecorator(
+    node_id="pd.dropna",
+    name="Drop NA",
+    description="Drops rows or columns with NA values.",
+)
+def dropna(
+    df: pandas.DataFrame,
+    axis: Literal["index", "columns"] = "index",
+    how: Literal["any", "all"] = "any",
+) -> pandas.DataFrame:
+    return df.dropna(axis=axis, how=how)
+
+
+@fn.NodeDecorator(
+    node_id="pd.fillna",
+    name="Fill NA",
+    description="Fills NA values with a specified value.",
+)
+def fillna(
+    df: pandas.DataFrame,
+    value: Union[str, int, float] = 0,
+) -> pandas.DataFrame:
+    return df.fillna(value)
+
+
+@fn.NodeDecorator(
+    node_id="pd.bfill",
+    name="Backfill",
+    description="Backfills NA values.",
+)
+def bfill(
+    df: pandas.DataFrame,
+) -> pandas.DataFrame:
+    return df.bfill()
+
+
+@fn.NodeDecorator(
+    node_id="pd.ffill",
+    name="Forwardfill",
+    description="Forwardfills NA values.",
+)
+def ffill(
+    df: pandas.DataFrame,
+) -> pandas.DataFrame:
+    return df.ffill()
+
+
+@fn.NodeDecorator(
+    node_id="pd.drop_duplicates",
+    name="Drop Duplicates",
+    description="Drops duplicate rows.",
+)
+def drop_duplicates(
+    df: pandas.DataFrame,
+) -> pandas.DataFrame:
+    return df.drop_duplicates()
+
+
+@fn.NodeDecorator(
+    node_id="pd.corr",
+    name="Correlation",
+    description="Calculates the correlation between columns.",
+    outputs=[{"name": "correlation", "type": pandas.DataFrame}],
+)
+def corr(
+    df: pandas.DataFrame,
+    method: Literal["pearson", "kendall", "spearman"] = "pearson",
+    numeric_only: bool = False,
+) -> pandas.DataFrame:
+    return df.corr(method=method, numeric_only=numeric_only)
+
+
 NODE_SHELF = fn.Shelf(
     nodes=[
         to_dict,
@@ -317,10 +427,16 @@ NODE_SHELF = fn.Shelf(
         GetColumnNode,
         to_orient_dict,
         from_orient_dict,
-        df_loc,
+        GetRowNode,
         df_iloc,
         df_from_array,
         DfFromExcelNode,
+        dropna,
+        fillna,
+        bfill,
+        ffill,
+        drop_duplicates,
+        corr,
     ],
     name="Datataframe",
     description="Pandas DataFrame nodes",

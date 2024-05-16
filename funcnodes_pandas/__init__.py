@@ -13,10 +13,16 @@ from .dataframe import (
     to_orient_dict,
     from_orient_dict,
     df_iloc,
-    df_loc,
+    GetRowNode as df_loc,
     to_csv_str,
     df_from_array,
     DfFromExcelNode,
+    dropna,
+    ffill,
+    bfill,
+    fillna,
+    drop_duplicates,
+    corr,
 )
 
 from .dataseries import (
@@ -59,7 +65,7 @@ FUNCNODES_RENDER_OPTIONS: fn.RenderOptions = {
     },
 }
 
-__version__ = "0.1.3"
+__version__ = "0.1.4"
 
 __all__ = [
     "NODE_SHELF",
@@ -83,4 +89,10 @@ __all__ = [
     "to_csv_str",
     "df_from_array",
     "DfFromExcelNode",
+    "dropna",
+    "ffill",
+    "bfill",
+    "fillna",
+    "drop_duplicates",
+    "corr",
 ]
