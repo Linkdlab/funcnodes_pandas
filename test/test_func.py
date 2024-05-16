@@ -223,6 +223,45 @@ class TestDF(unittest.IsolatedAsyncioTestCase):
         await ins
         pd.testing.assert_frame_equal(ins.outputs["out"].value, self.df.iloc[1:])
 
+    async def test_add_column(self):
+        ins = fnpd.add_column()
+        ins.inputs["df"].value = self.df
+        ins.inputs["column"].value = "D"
+        ins.inputs["data"].value = 1
+        await ins
+        self.assertEqual(
+            ins.outputs["out"].value.columns.tolist(), ["A", "B", "C", "D"]
+        )
+        self.assertEqual(ins.outputs["out"].value["D"].tolist(), [1, 1, 1])
+
+        ins = fnpd.add_column()
+        ins.inputs["df"].value = self.df
+        ins.inputs["column"].value = "D"
+        ins.inputs["data"].value = [1, 2, 3]
+        await ins
+        self.assertEqual(
+            ins.outputs["out"].value.columns.tolist(), ["A", "B", "C", "D"]
+        )
+        self.assertEqual(ins.outputs["out"].value["D"].tolist(), [1, 2, 3])
+
+        ins = fnpd.add_column()
+        ins.inputs["df"].value = self.df
+        ins.inputs["column"].value = "D"
+        ins.inputs["data"].value = [1, 2]
+        await ins
+        self.assertEqual(ins.outputs["out"].value, fn.NoValue)
+
+    async def test_add_row(self):
+        ins = fnpd.add_row()
+        ins.inputs["df"].value = self.df
+        ins.inputs["row"].value = [1, 2, 3]
+        await ins
+
+        pd.testing.assert_frame_equal(
+            ins.outputs["out"].value.iloc[-1:],
+            pd.DataFrame([[1, 2, 3.0]], columns=["A", "B", "C"]),
+        )
+
 
 class TestSeries(unittest.IsolatedAsyncioTestCase):
     def setUp(self) -> None:

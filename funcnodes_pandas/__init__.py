@@ -28,6 +28,8 @@ from .dataframe import (
     drop_rows,
     DropColumnNode as drop_column,
     DropRowNode as drop_row,
+    add_column,
+    add_row,
 )
 
 from .dataseries import (
@@ -39,6 +41,22 @@ from .dataseries import (
     ser_from_dict,
     ser_from_list,
     NODE_SHELF as SERIES_SHELF,
+)
+
+from .grouping import (
+    GroupByColumnNode as group_by_column,
+    group_by,
+    mean,
+    sum,
+    max,
+    min,
+    std,
+    var,
+    count,
+    describe,
+    group_to_list,
+    GetDFfromGroupNode as get_df_from_group,
+    NODE_SHELF as GROUPING_SHELF,
 )
 
 
@@ -58,7 +76,7 @@ fn.JSONEncoder.add_encoder(encode_pdDf)
 
 NODE_SHELF = fn.Shelf(
     nodes=[],
-    subshelves=[DF_SHELF, SERIES_SHELF],
+    subshelves=[DF_SHELF, SERIES_SHELF, GROUPING_SHELF],
     name="Pandas",
     description="Pandas nodes",
 )
@@ -70,7 +88,7 @@ FUNCNODES_RENDER_OPTIONS: fn.RenderOptions = {
     },
 }
 
-__version__ = "0.1.4"
+__version__ = "0.1.6"
 
 __all__ = [
     "NODE_SHELF",
@@ -105,4 +123,6 @@ __all__ = [
     "drop_rows",
     "drop_column",
     "drop_row",
+    "add_column",
+    "add_row",
 ]
