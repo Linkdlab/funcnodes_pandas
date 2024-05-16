@@ -23,6 +23,11 @@ from .dataframe import (
     fillna,
     drop_duplicates,
     corr,
+    numeric_only,
+    drop_columns,
+    drop_rows,
+    DropColumnNode as drop_column,
+    DropRowNode as drop_row,
 )
 
 from .dataseries import (
@@ -95,4 +100,9 @@ __all__ = [
     "fillna",
     "drop_duplicates",
     "corr",
+    "numeric_only",
+    "drop_columns",
+    "drop_rows",
+    "drop_column",
+    "drop_row",
 ]

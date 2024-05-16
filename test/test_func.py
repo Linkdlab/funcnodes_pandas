@@ -113,6 +113,8 @@ class TestDF(unittest.IsolatedAsyncioTestCase):
                 "pd.get_column",
                 "pd.df_loc",
                 "pd.df_from_xlsx",
+                "pd.drop_row",
+                "pd.drop_column",
             ]:  # Skip class based Nodes
                 continue
             self.assertTrue(
@@ -188,6 +190,38 @@ class TestDF(unittest.IsolatedAsyncioTestCase):
         timeout = 2
         await asyncio.wait_for(ins, timeout)
         pd.testing.assert_frame_equal(ins.outputs["correlation"].value, self.df.corr())
+
+    async def test_numeric_only(self):
+        df = self.df.copy()
+        df["D"] = ["a", "b", "a"]
+        ins = fnpd.numeric_only()
+        ins.inputs["df"].value = df
+        await ins
+        pd.testing.assert_frame_equal(
+            ins.outputs["out"].value, self.df.select_dtypes(include=[np.number])
+        )
+        self.assertEqual(ins.outputs["out"].value.columns.tolist(), ["A", "B", "C"])
+
+        ins.get_input("label_encode").value = True
+        await ins
+        self.assertEqual(
+            ins.outputs["out"].value.columns.tolist(), ["A", "B", "C", "D"]
+        )
+        self.assertEqual(ins.outputs["out"].value["D"].tolist(), [0, 1, 0])
+
+    async def test_drop_columns(self):
+        ins = fnpd.drop_columns()
+        ins.inputs["df"].value = self.df
+        ins.inputs["columns"].value = "A"
+        await ins
+        self.assertEqual(ins.outputs["out"].value.columns.tolist(), ["B", "C"])
+
+    async def test_drop_rows(self):
+        ins = fnpd.drop_rows()
+        ins.inputs["df"].value = self.df
+        ins.inputs["rows"].value = "0"
+        await ins
+        pd.testing.assert_frame_equal(ins.outputs["out"].value, self.df.iloc[1:])
 
 
 class TestSeries(unittest.IsolatedAsyncioTestCase):

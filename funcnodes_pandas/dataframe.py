@@ -418,6 +418,161 @@ def corr(
     return df.corr(method=method, numeric_only=numeric_only)
 
 
+@fn.NodeDecorator(
+    node_id="pd.numeric_only",
+    name="Numeric Only",
+)
+def numeric_only(df: pandas.DataFrame, label_encode=False) -> pandas.DataFrame:
+    """
+    Converts a DataFrame to only hold numeric values.
+    Optionally, non-numeric values can be converted to numeric labels.
+
+    Parameters:
+    - df: pandas DataFrame
+    - label_encode: bool, if True, convert non-numeric values to numeric labels
+
+    Returns:
+    - A new DataFrame containing only numeric values
+    """
+
+    if label_encode:
+        df = df.copy()
+        for column in df.select_dtypes(exclude=[np.number]):
+            try:
+                df[column] = pandas.to_numeric(df[column])
+            except ValueError:
+                pass
+        for column in df.select_dtypes(include=["object", "category"]):
+            df[column] = df[column].astype("category").cat.codes
+
+    numeric_df = df.select_dtypes(include=[np.number])
+    return numeric_df
+
+
+class DropColumnNode(fn.Node):
+    node_id = "pd.drop_column"
+    node_name = "Drop Column"
+    df = fn.NodeInput(
+        "DataFrame",
+        type=pandas.DataFrame,
+        uuid="df",
+    )
+
+    column = fn.NodeInput(
+        "Column",
+        type=str,
+        uuid="column",
+    )
+
+    out = fn.NodeOutput(
+        "New DataFrame",
+        type=pandas.DataFrame,
+        uuid="out",
+    )
+
+    def __init__(self):
+        super().__init__()
+        self.get_input("df").on("after_set_value", self._update_columns)
+
+    def _update_columns(self, **kwargs):
+        try:
+            df = self.get_input("df").value
+            col = self.get_input("column")
+        except KeyError:
+            return
+        try:
+            col.update_value_options(options=list(df.columns))
+        except Exception:
+            col.update_value_options(options=[])
+
+    async def func(
+        self,
+        df: pandas.DataFrame,
+        column: str,
+    ) -> pandas.DataFrame:
+        df = df.drop(column, axis=1)
+        self.get_output("out").value = df
+        return df
+
+
+class DropRowNode(fn.Node):
+    node_id = "pd.drop_row"
+    node_name = "Drop Row"
+    df = fn.NodeInput(
+        "DataFrame",
+        type=pandas.DataFrame,
+        uuid="df",
+    )
+
+    row = fn.NodeInput(
+        "Row",
+        type=str,
+        uuid="row",
+    )
+
+    out = fn.NodeOutput(
+        "New DataFrame",
+        type=pandas.DataFrame,
+        uuid="out",
+    )
+
+    def __init__(self):
+        super().__init__()
+        self.get_input("df").on("after_set_value", self._update_rows)
+
+    def _update_rows(self, **kwargs):
+        try:
+            df = self.get_input("df").value
+            row = self.get_input("row")
+        except KeyError:
+            return
+        try:
+            row.update_value_options(options=list(df.index))
+        except Exception:
+            row.update_value_options(options=[])
+
+    async def func(
+        self,
+        df: pandas.DataFrame,
+        row: str,
+    ) -> pandas.DataFrame:
+        df = df.drop(row, axis=0)
+        self.get_output("out").value = df
+        return df
+
+
+@fn.NodeDecorator(
+    node_id="pd.drop_columns",
+    name="Drop Columns",
+    description="Drops columns from a DataFrame.",
+)
+def drop_columns(
+    df: pandas.DataFrame,
+    columns: str,
+) -> pandas.DataFrame:
+    columns = [s.strip() for s in columns.split(",")]
+    return df.drop(columns, axis=1)
+
+
+@fn.NodeDecorator(
+    node_id="pd.drop_rows",
+    name="Drop Rows",
+    description="Drops rows from a DataFrame.",
+)
+def drop_rows(
+    df: pandas.DataFrame,
+    rows: str,
+) -> pandas.DataFrame:
+    rows = [s.strip() for s in rows.split(",")]
+
+    if len(df.index) == 0:
+        return df
+    cls = df.index.to_list()[0].__class__
+    rows = [cls(row) for row in rows]
+
+    return df.drop(rows, axis=0)
+
+
 NODE_SHELF = fn.Shelf(
     nodes=[
         to_dict,
@@ -437,6 +592,11 @@ NODE_SHELF = fn.Shelf(
         ffill,
         drop_duplicates,
         corr,
+        numeric_only,
+        DropColumnNode,
+        DropRowNode,
+        drop_columns,
+        drop_rows,
     ],
     name="Datataframe",
     description="Pandas DataFrame nodes",
