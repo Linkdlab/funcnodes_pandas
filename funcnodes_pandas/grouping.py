@@ -197,7 +197,7 @@ class GetDFfromGroupNode(fn.Node):
 
     def __init__(self):
         super().__init__()
-        self.get_input("df").on("after_set_value", self._update_groups)
+        self.get_input("group").on("after_set_value", self._update_groups)
 
     def _update_groups(self, **kwargs):
         try:
@@ -213,9 +213,9 @@ class GetDFfromGroupNode(fn.Node):
     async def func(
         self,
         group: DataFrameGroupBy,
-        column: str,
+        name: str,
     ) -> pd.DataFrame:
-        df = group.get_group(column).copy()
+        df = group.get_group(name).copy()
         self.get_output("df").value = df
         return df
 

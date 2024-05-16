@@ -88,7 +88,7 @@ FUNCNODES_RENDER_OPTIONS: fn.RenderOptions = {
     },
 }
 
-__version__ = "0.1.6"
+__version__ = "0.1.7"
 
 __all__ = [
     "NODE_SHELF",
@@ -125,4 +125,16 @@ __all__ = [
     "drop_row",
     "add_column",
     "add_row",
+    "group_by_column",
+    "group_by",
+    "mean",
+    "sum",
+    "max",
+    "min",
+    "std",
+    "var",
+    "count",
+    "describe",
+    "group_to_list",
+    "get_df_from_group",
 ]
