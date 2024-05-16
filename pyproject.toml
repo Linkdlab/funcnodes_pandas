@@ -8,10 +8,10 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.10"
-funcnodes =">=0.1.42 <1.0.0"
-pandas = "^2.2.1"
+funcnodes =">=0.1.42"
+pandas = "*"
 funcnodes-numpy = ">=0.1.5"
-openpyxl = "^3.1.2"
+openpyxl = "*"
 
 
 [tool.poetry.group.dev.dependencies]
