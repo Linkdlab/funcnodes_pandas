@@ -237,4 +237,5 @@ NODE_SHELF = fn.Shelf(
     ],
     name="Grouping",
     description="Pandas grouping nodes",
+    subshelves=[],
 )
