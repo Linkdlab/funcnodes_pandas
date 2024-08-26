@@ -154,7 +154,11 @@ def count(
     node_id="pd.describe",
     name="Describe",
     description="Describes a DataFrameGroup.",
-    outputs=[{"name": "description", "type": pd.DataFrame}],
+    outputs=[
+        {
+            "name": "description",
+        }
+    ],
 )
 def describe(
     group: DataFrameGroupBy,
