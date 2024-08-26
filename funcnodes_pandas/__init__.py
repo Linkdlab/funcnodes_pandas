@@ -17,6 +17,7 @@ from .dataframe import (
     to_csv_str,
     df_from_array,
     DfFromExcelNode,
+    df_to_xls,
     dropna,
     ffill,
     bfill,
@@ -30,6 +31,7 @@ from .dataframe import (
     DropRowNode as drop_row,
     add_column,
     add_row,
+    concatenate,
 )
 
 from .dataseries import (
@@ -88,7 +90,7 @@ FUNCNODES_RENDER_OPTIONS: fn.RenderOptions = {
     },
 }
 
-__version__ = "0.1.8"
+__version__ = "0.1.9"
 
 __all__ = [
     "NODE_SHELF",
@@ -112,6 +114,7 @@ __all__ = [
     "to_csv_str",
     "df_from_array",
     "DfFromExcelNode",
+    "df_to_xls",
     "dropna",
     "ffill",
     "bfill",
@@ -120,6 +123,7 @@ __all__ = [
     "corr",
     "numeric_only",
     "drop_columns",
+    "concatenate",
     "drop_rows",
     "drop_column",
     "drop_row",

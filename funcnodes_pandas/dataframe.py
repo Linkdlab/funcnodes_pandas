@@ -4,7 +4,7 @@ from funcnodes.triggerstack import TriggerStack
 import pandas as pd
 import exposedfunctionality.function_parser.types as exf_types
 import enum
-from io import StringIO
+from io import StringIO, BytesIO
 import numpy as np
 
 
@@ -177,16 +177,43 @@ class DfFromExcelNode(fn.Node):
         required=False,
     )
 
+    with_index = fn.NodeInput(
+        id="with_index",
+        type=bool,
+        default=False,
+        required=False,
+    )
+
     df = fn.NodeOutput(id="df", type=pd.DataFrame)
 
-    async def func(self, data: bytes, sheet: str = None):
+    async def func(self, data: bytes, sheet: str = None, with_index: bool = False):
         # get sheet names
-        sheets = pd.ExcelFile(data).sheet_names
+        buff = BytesIO(data)
+        sheets = pd.ExcelFile(buff).sheet_names
         self.inputs["sheet"].value_options = {s: s for s in sheets}
         if sheet is None or sheet not in sheets:
             sheet = sheets[0]
         self.inputs["sheet"].set_value(sheet, does_trigger=False)
-        self.outputs["df"].value = pd.read_excel(data, sheet_name=sheet)
+        self.outputs["df"].value = pd.read_excel(
+            data, sheet_name=sheet, index_col=0 if with_index else None
+        )
+
+
+@fn.NodeDecorator(
+    node_id="pd.df_to_xls",
+    name="To Excel",
+    description="Writes a DataFrame to an Excel file.",
+    outputs=[{"name": "xls"}],
+)
+def df_to_xls(
+    df: pd.DataFrame,
+    sheet_name: str = "Sheet1",
+    with_index: bool = False,
+) -> bytes:
+    output = BytesIO()
+    with pd.ExcelWriter(output, engine="openpyxl") as writer:
+        df.to_excel(writer, sheet_name=sheet_name, index=with_index)
+    return output.getvalue()
 
 
 @fn.NodeDecorator(
@@ -611,6 +638,15 @@ def add_row(
     return df
 
 
+@fn.NodeDecorator(
+    node_id="pd.concat",
+    name="Concatenate",
+    description="Concatenates two DataFrames.",
+)
+def concatenate(df1: pd.DataFrame, df2: pd.DataFrame) -> pd.DataFrame:
+    return pd.concat([df1, df2])
+
+
 NODE_SHELF = fn.Shelf(
     nodes=[
         to_dict,
@@ -637,6 +673,7 @@ NODE_SHELF = fn.Shelf(
         drop_rows,
         add_column,
         add_row,
+        concatenate,
     ],
     name="Datataframe",
     description="Pandas DataFrame nodes",
