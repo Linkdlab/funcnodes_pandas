@@ -1,8 +1,7 @@
-from typing import TypedDict, List, Union, Literal, Any
+from typing import TypedDict, List, Union, Literal, Any, Optional
 import funcnodes as fn
 import pandas as pd
 import exposedfunctionality.function_parser.types as exf_types
-import enum
 from io import StringIO, BytesIO
 import numpy as np
 
@@ -106,7 +105,7 @@ def from_orient_dict(
     return pd.DataFrame(data)
 
 
-class SepEnum(enum.Enum):
+class SepEnum(fn.DataEnum):
     COMMA = ","
     SEMICOLON = ";"
     TAB = "\t"
@@ -117,7 +116,7 @@ class SepEnum(enum.Enum):
         return str(self.value)
 
 
-class DecimalEnum(enum.Enum):
+class DecimalEnum(fn.DataEnum):
     COMMA = ","
     DOT = "."
 
@@ -139,26 +138,13 @@ def from_csv_str(
     source: str,
     sep: SepEnum = ",",
     decimal: DecimalEnum = ".",
+    thousands: Optional[DecimalEnum] = None,
 ) -> pd.DataFrame:
-    if "SepEnum." in sep:
-        sep = sep.replace("SepEnum.", "")
+    sep = SepEnum.v(sep)
+    decimal = DecimalEnum.v(decimal)
+    thousands = DecimalEnum.v(thousands) if thousands is not None else None
 
-    if "DecimalEnum." in decimal:
-        decimal = decimal.replace("DecimalEnum.", "")
-    # Check if sep is a string that matches an enum member's name, then get its value
-
-    if isinstance(sep, str) and sep in SepEnum.__members__:
-        sep = SepEnum[sep].value
-    elif isinstance(sep, SepEnum):  # Direct instance of SepEnum
-        sep = sep.value
-
-    # Similar check and conversion for decimal
-    if isinstance(decimal, str) and decimal in DecimalEnum.__members__:
-        decimal = DecimalEnum[decimal].value
-    elif isinstance(decimal, DecimalEnum):  # Direct instance of DecimalEnum
-        decimal = decimal.value
-
-    return pd.read_csv(StringIO(source), sep=sep, decimal=decimal)
+    return pd.read_csv(StringIO(source), sep=sep, decimal=decimal, thousands=thousands)
 
 
 class DfFromExcelNode(fn.Node):
@@ -225,25 +211,12 @@ def to_csv_str(
     df: pd.DataFrame,
     sep: SepEnum = ",",
     decimal: DecimalEnum = ".",
+    thousands: Optional[DecimalEnum] = None,
     index: bool = False,
 ) -> str:
-    if "SepEnum." in sep:
-        sep = sep.replace("SepEnum.", "")
-
-    if "DecimalEnum." in decimal:
-        decimal = decimal.replace("DecimalEnum.", "")
-    # Check if sep is a string that matches an enum member's name, then get its value
-
-    if isinstance(sep, str) and sep in SepEnum.__members__:
-        sep = SepEnum[sep].value
-    elif isinstance(sep, SepEnum):
-        sep = sep.value
-
-    # Similar check and conversion for decimal
-    if isinstance(decimal, str) and decimal in DecimalEnum.__members__:
-        decimal = DecimalEnum[decimal].value
-    elif isinstance(decimal, DecimalEnum):
-        decimal = decimal.value
+    sep = SepEnum.v(sep)
+    decimal = DecimalEnum.v(decimal)
+    thousands = DecimalEnum.v(thousands) if thousands is not None else None
 
     return df.to_csv(sep=sep, decimal=decimal, index=index)
 
