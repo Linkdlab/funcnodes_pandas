@@ -1,6 +1,5 @@
 from typing import TypedDict, List, Union, Literal, Any
 import funcnodes as fn
-from funcnodes.triggerstack import TriggerStack
 import pandas as pd
 import exposedfunctionality.function_parser.types as exf_types
 import enum

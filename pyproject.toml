@@ -1,22 +1,27 @@
 [tool.poetry]
 name = "funcnodes-pandas"
-version = "0.1.8"
+version = "0.2.0"
 description = ""
 authors = ["Julian Kimmig <julian.kimmig@gmx.net>"]
 license = "MIT"
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.10"
-funcnodes =">=0.1.42"
+python = ">=3.11"
+funcnodes ="*"
 pandas = "*"
-funcnodes-numpy = ">=0.1.5"
+funcnodes-numpy = "*"
 openpyxl = "*"
 
 
 [tool.poetry.group.dev.dependencies]
-pytest = "^8.1.1"
+pytest = "*"
+pre-commit = "*"
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.plugins."funcnodes.module"]
+module = "funcnodes_pandas"
+shelf = "funcnodes_pandas:NODE_SHELF"
