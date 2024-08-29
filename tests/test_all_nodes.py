@@ -65,7 +65,7 @@ class TestAllNodes(TestAllNodesBase):
         ins = fnpd.get_column()
         ins.inputs["df"].value = self.df
         await ins
-        self.assertEqual(ins.outputs["series"].value, fn.io.NoValue)
+        self.assertEqual(ins.outputs["series"].value, fn.NoValue)
 
         self.assertEqual(
             ins.get_input("column").value_options["options"],
@@ -258,7 +258,7 @@ class TestAllNodes(TestAllNodesBase):
             ins.outputs["out"].value, pd.concat([self.df, self.df])
         )
 
-    ## series
+    # series
 
     async def test_ser_to_dict(self):
         ins = fnpd.ser_to_dict()
@@ -313,7 +313,7 @@ class TestAllNodes(TestAllNodesBase):
 
         self.assertTrue(np.all(ins.outputs["values"].value == self.series.values))
 
-    ## grouping
+    # grouping
     async def test_groupby(self):
         ins = fnpd.group_by()
         ins.inputs["df"].value = self.df
