@@ -65,12 +65,24 @@ from .grouping import (
 def encode_pdDf(obj, preview=False):
     if isinstance(obj, pd.DataFrame):
         if preview:
-            return obj.head().to_dict(orient="split"), True
+            return fn.Encdata(
+                obj.head().to_dict(orient="split"),
+                handeled=True,
+                continue_preview=False,
+            )
         else:
-            return obj.to_dict(orient="split"), True
+            return fn.Encdata(
+                obj.to_dict(orient="split"),
+                handeled=True,
+                continue_preview=False,
+            )
     if isinstance(obj, pd.Series):
-        return obj.to_list(), True
-    return obj, False
+        return fn.Encdata(
+            obj.to_list(),
+            handeled=True,
+            continue_preview=False,
+        )
+    return fn.Encdata(obj, handeled=False)
 
 
 fn.JSONEncoder.add_encoder(encode_pdDf)
@@ -90,7 +102,7 @@ FUNCNODES_RENDER_OPTIONS: fn.RenderOptions = {
     },
 }
 
-__version__ = "0.2.1"
+__version__ = "0.2.2"
 
 __all__ = [
     "NODE_SHELF",

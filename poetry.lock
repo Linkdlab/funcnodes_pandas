@@ -23,6 +23,21 @@ files = [
 ]
 
 [[package]]
+name = "dill"
+version = "0.3.8"
+description = "serialize all of Python"
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "dill-0.3.8-py3-none-any.whl", hash = "sha256:c36ca9ffb54365bdd2f8eb3eff7d2a21237f8452b57ace88b1ac615b7e815bd7"},
+    {file = "dill-0.3.8.tar.gz", hash = "sha256:3ebe3c479ad625c4553aca177444d89b486b1d84982eeacded644afc0cf797ca"},
+]
+
+[package.extras]
+graph = ["objgraph (>=1.7.2)"]
+profile = ["gprof2dot (>=2022.7.29)"]
+
+[[package]]
 name = "distlib"
 version = "0.3.8"
 description = "Distribution utilities"
@@ -77,19 +92,19 @@ typing = ["typing-extensions (>=4.8)"]
 
 [[package]]
 name = "funcnodes"
-version = "0.4.1"
+version = "0.4.5"
 description = "funcnodes"
 optional = false
 python-versions = ">=3.11"
 files = [
-    {file = "funcnodes-0.4.1-py3-none-any.whl", hash = "sha256:c44f245739484a849bcf8e31b864c138a66bffd46495da35447f8763c2108b73"},
-    {file = "funcnodes-0.4.1.tar.gz", hash = "sha256:27a68b116f582aa2fb3da292d91dfbb0b788cad250635a9740a23189c5261845"},
+    {file = "funcnodes-0.4.5-py3-none-any.whl", hash = "sha256:34d33de05ced99f7710ca93d62a615f1a8e0224c3f57b279a1754aea36a5fe5f"},
+    {file = "funcnodes-0.4.5.tar.gz", hash = "sha256:3d715a55dab3352429bb9475aa375548cdc04f5d3bff58413f3edc02c4ad82df"},
 ]
 
 [package.dependencies]
 funcnodes-basic = ">=0.1.6"
-funcnodes-core = ">=0.1.1"
-funcnodes-react-flow = ">=0.1.5"
+funcnodes-core = ">=0.1.6"
+funcnodes-react-flow = ">=0.1.7"
 setproctitle = ">=1"
 virtualenv = "*"
 websockets = "*"
@@ -110,18 +125,20 @@ funcnodes-core = "*"
 
 [[package]]
 name = "funcnodes-core"
-version = "0.1.1"
+version = "0.1.6"
 description = "core package for funcnodes"
 optional = false
 python-versions = ">=3.11"
 files = [
-    {file = "funcnodes_core-0.1.1-py3-none-any.whl", hash = "sha256:38859d01c582cd19eb460b8b1f906b9077f1b8930aa3b5aa0c4855d8b367cf63"},
-    {file = "funcnodes_core-0.1.1.tar.gz", hash = "sha256:c7d034146568a8b6c389188bb73a1e318b801146b483afb2405c498d489358c5"},
+    {file = "funcnodes_core-0.1.6-py3-none-any.whl", hash = "sha256:4625bd3b30496c98aa6fa989e292161475ce40ef9e614085fef1e9a761fd6e12"},
+    {file = "funcnodes_core-0.1.6.tar.gz", hash = "sha256:1110b3a2549b255a76e5388fc7fdbb5facde3b09d7b952a9549db6fb020eb321"},
 ]
 
 [package.dependencies]
+dill = "*"
 exposedfunctionality = ">=0.3.10"
 python-dotenv = "*"
+setuptools = "*"
 
 [[package]]
 name = "funcnodes-numpy"
@@ -140,13 +157,13 @@ numpy = "*"
 
 [[package]]
 name = "funcnodes-react-flow"
-version = "0.1.5"
+version = "0.1.8"
 description = "funcnodes frontend for react flow"
 optional = false
 python-versions = ">=3.11"
 files = [
-    {file = "funcnodes_react_flow-0.1.5-py3-none-any.whl", hash = "sha256:9b4a9504fe3e923e044db3faf938ce4adbac547d047a8fdb18242d0defb63009"},
-    {file = "funcnodes_react_flow-0.1.5.tar.gz", hash = "sha256:9b3e22419d1d083fab84308ad7f6804d17ad69bceec8f47908460bef5f431bac"},
+    {file = "funcnodes_react_flow-0.1.8-py3-none-any.whl", hash = "sha256:f99a672d76e2d5cb19a3411994bb56aebd878b810ba8135002dc994864924391"},
+    {file = "funcnodes_react_flow-0.1.8.tar.gz", hash = "sha256:9116fa8637d3b91aea6016472d3f435253f232b67bee21171aa0f577a7147f1a"},
 ]
 
 [package.dependencies]
@@ -617,6 +634,26 @@ files = [
 test = ["pytest"]
 
 [[package]]
+name = "setuptools"
+version = "74.1.0"
+description = "Easily download, build, install, upgrade, and uninstall Python packages"
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "setuptools-74.1.0-py3-none-any.whl", hash = "sha256:cee604bd76cc092355a4e43ec17aee5369095974f41f088676724dc6bc2c9ef8"},
+    {file = "setuptools-74.1.0.tar.gz", hash = "sha256:bea195a800f510ba3a2bc65645c88b7e016fe36709fefc58a880c4ae8a0138d7"},
+]
+
+[package.extras]
+check = ["pytest-checkdocs (>=2.4)", "pytest-ruff (>=0.2.1)", "ruff (>=0.5.2)"]
+core = ["importlib-metadata (>=6)", "importlib-resources (>=5.10.2)", "jaraco.text (>=3.7)", "more-itertools (>=8.8)", "packaging (>=24)", "platformdirs (>=2.6.2)", "tomli (>=2.0.1)", "wheel (>=0.43.0)"]
+cover = ["pytest-cov"]
+doc = ["furo", "jaraco.packaging (>=9.3)", "jaraco.tidelift (>=1.4)", "pygments-github-lexers (==0.0.5)", "pyproject-hooks (!=1.1)", "rst.linker (>=1.9)", "sphinx (>=3.5)", "sphinx-favicon", "sphinx-inline-tabs", "sphinx-lint", "sphinx-notfound-page (>=1,<2)", "sphinx-reredirects", "sphinxcontrib-towncrier", "towncrier (<24.7)"]
+enabler = ["pytest-enabler (>=2.2)"]
+test = ["build[virtualenv] (>=1.0.3)", "filelock (>=3.4.0)", "ini2toml[lite] (>=0.14)", "jaraco.develop (>=7.21)", "jaraco.envs (>=2.2)", "jaraco.path (>=3.2.0)", "jaraco.test", "packaging (>=23.2)", "pip (>=19.1)", "pyproject-hooks (!=1.1)", "pytest (>=6,!=8.1.*)", "pytest-home (>=0.5)", "pytest-perf", "pytest-subprocess", "pytest-timeout", "pytest-xdist (>=3)", "tomli-w (>=1.0.0)", "virtualenv (>=13.0.0)", "wheel (>=0.44.0)"]
+type = ["importlib-metadata (>=7.0.2)", "jaraco.develop (>=7.21)", "mypy (==1.11.*)", "pytest-mypy"]
+
+[[package]]
 name = "six"
 version = "1.16.0"
 description = "Python 2 and 3 compatibility utilities"
@@ -767,4 +804,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.11"
-content-hash = "7dafed17c885a2ab0cf72ac024338567f3c7b15eac9e75a0e14efe58f4a63fd1"
+content-hash = "9eeeda0e9eadbafdb5d42bf08107521a2afe94419dfb5895685b578a4e85bf5c"
