@@ -45,11 +45,21 @@ def ser_to_list(
     name="Get Value",
     description="Gets a value from a Series by label.",
     outputs=[{"name": "value", "type": Any}],
+    default_io_options={
+        "ser": {
+            "on": {
+                "after_set_value": fn.decorator.update_other_io(
+                    "label",
+                    lambda x: list(x.index),
+                )
+            }
+        },
+    },
 )
 def ser_loc(
     ser: pandas.Series,
-    label: Union[str],
-) -> Union[str]:
+    label: str,
+) -> str:
     # taransform label to the correct type
     label = ser.index.to_list()[0].__class__(label)
     return ser.loc[label]
@@ -60,12 +70,21 @@ def ser_loc(
     name="Get Value by Index",
     description="Gets a value from a Series by index.",
     outputs=[{"name": "value", "type": Any}],
+    default_io_options={
+        "ser": {
+            "on": {
+                "after_set_value": lambda src, result: src.node[
+                    "index"
+                ].update_value_options(min=0, max=len(result) - 1, step=1)
+            }
+        },
+    },
 )
 def ser_iloc(
     ser: pandas.Series,
     index: int,
 ) -> Union[str]:
-    return ser.iloc[index]
+    return ser.iloc[int(index)]
 
 
 @fn.NodeDecorator(

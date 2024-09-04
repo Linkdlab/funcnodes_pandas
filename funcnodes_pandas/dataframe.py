@@ -31,7 +31,7 @@ def to_dict(
     node_id="pd.df_to_orient_dict",
     name="To Dictionary with Orientation",
     description="Converts a DataFrame to a dictionary with a specific orientation.",
-    outputs=[{"name": "dict", "type": DataFrameDict}],
+    outputs=[{"name": "dict", "type": dict}],
 )
 def to_orient_dict(
     df: pd.DataFrame,
@@ -147,41 +147,29 @@ def from_csv_str(
     return pd.read_csv(StringIO(source), sep=sep, decimal=decimal, thousands=thousands)
 
 
-class DfFromExcelNode(fn.Node):
-    node_id = "pd.df_from_xlsx"
-    node_name = "From Excel"
-
-    data = fn.NodeInput(
-        id="data",
-        type=bytes,
+@fn.NodeDecorator(
+    node_id="pd.df_from_xlsx",
+    name="From Excel",
+    description="Reads an Excel file into a DataFrame.",
+    outputs=[{"name": "df", "type": pd.DataFrame}],
+    default_io_options={
+        "data": {
+            "on": {
+                "after_set_value": fn.decorator.update_other_io(
+                    "sheet",
+                    lambda x: pd.ExcelFile(BytesIO(x)).sheet_names,
+                )
+            }
+        }
+    },
+)
+def DfFromExcelNode(data: bytes, sheet: Optional[str] = None, with_index: bool = False):
+    # if sheed is not provided, we return the first sheet
+    if sheet is None:
+        sheet = 0
+    return pd.read_excel(
+        BytesIO(data), sheet_name=sheet, index_col=0 if with_index else None
     )
-    sheet = fn.NodeInput(
-        id="sheet",
-        type=str,
-        default=None,
-        required=False,
-    )
-
-    with_index = fn.NodeInput(
-        id="with_index",
-        type=bool,
-        default=False,
-        required=False,
-    )
-
-    df = fn.NodeOutput(id="df", type=pd.DataFrame)
-
-    async def func(self, data: bytes, sheet: str = None, with_index: bool = False):
-        # get sheet names
-        buff = BytesIO(data)
-        sheets = pd.ExcelFile(buff).sheet_names
-        self.inputs["sheet"].value_options = {s: s for s in sheets}
-        if sheet is None or sheet not in sheets:
-            sheet = sheets[0]
-        self.inputs["sheet"].set_value(sheet, does_trigger=False)
-        self.outputs["df"].value = pd.read_excel(
-            data, sheet_name=sheet, index_col=0 if with_index else None
-        )
 
 
 @fn.NodeDecorator(
@@ -205,7 +193,7 @@ def df_to_xls(
     node_id="pd.df_to_csv_str",
     name="To CSV",
     description="Writes a DataFrame to a CSV string.",
-    outputs=[{"name": "csv", "type": str}],
+    outputs=[{"name": "csv"}],
 )
 def to_csv_str(
     df: pd.DataFrame,
@@ -221,99 +209,44 @@ def to_csv_str(
     return df.to_csv(sep=sep, decimal=decimal, index=index)
 
 
-class GetColumnNode(fn.Node):
-    node_id = "pd.get_column"
-    node_name = "Get Column"
-    df = fn.NodeInput(
-        "DataFrame",
-        type=pd.DataFrame,
-        uuid="df",
-    )
-
-    column = fn.NodeInput(
-        "Column",
-        type=str,
-        uuid="column",
-    )
-
-    series = fn.NodeOutput(
-        "Series",
-        type=pd.Series,
-        uuid="series",
-    )
-
-    def __init__(self):
-        super().__init__()
-        self.get_input("df").on("after_set_value", self._update_columns)
-
-    def _update_columns(self, **kwargs):
-        try:
-            df = self.get_input("df").value
-            col = self.get_input("column")
-        except KeyError:
-            return
-        try:
-            col.update_value_options(options=list(df.columns))
-        except Exception:
-            col.update_value_options(options=[])
-
-    async def func(
-        self,
-        df: pd.DataFrame,
-        column: str,
-    ) -> pd.Series:
-        self.get_output("series").value = df[column]
-        return df[column]
+@fn.NodeDecorator(
+    node_id="pd.get_column",
+    name="Get Column",
+    description="Gets a column from a DataFrame.",
+    outputs=[{"name": "series", "type": pd.Series}],
+    default_io_options={
+        "df": {
+            "on": {
+                "after_set_value": fn.decorator.update_other_io(
+                    "column",
+                    lambda x: list(iter(x)),
+                )
+            }
+        },
+    },
+)
+def GetColumnNode(df: pd.DataFrame, column: str) -> pd.Series:
+    return df[column]
 
 
-class GetRowNode(fn.Node):
-    node_id = "pd.df_loc"
-    node_name = "Get Row"
-    description = "Gets a row from a DataFrame by label."
-    df = fn.NodeInput(
-        "DataFrame",
-        type=pd.DataFrame,
-        uuid="df",
-    )
-
-    row = fn.NodeInput(
-        "Row",
-        type=str,
-        uuid="row",
-    )
-
-    series = fn.NodeOutput(
-        "Series",
-        type=pd.Series,
-        uuid="series",
-    )
-
-    def __init__(self):
-        super().__init__()
-        self.get_input("df").on("after_set_value", self._update_rows)
-
-    def _update_rows(self, **kwargs):
-        try:
-            df = self.get_input("df").value
-            row = self.get_input("row")
-        except KeyError:
-            return
-        try:
-            row.update_value_options(options=list(df.index))
-        except Exception:
-            row.update_value_options(options=[])
-
-    async def func(
-        self,
-        df: pd.DataFrame,
-        row: str,
-    ) -> pd.Series:
-        if len(df.index) == 0:
-            return pd.Series(index=df.columns)
-        label = df.index.to_list()[0].__class__(row)
-        ser = df.loc[label]
-        self.get_output("series").value = ser
-        return ser
+@fn.NodeDecorator(
+    node_id="pd.get_row",
+    name="Get Row",
+    description="Gets a row from a DataFrame by label.",
+    outputs=[{"name": "series", "type": pd.Series}],
+    default_io_options={
+        "df": {
+            "on": {
+                "after_set_value": fn.decorator.update_other_io(
+                    "row",
+                    lambda x: list(x.index),
+                )
+            }
+        },
+    },
+)
+def GetRowNode(df: pd.DataFrame, row: str) -> pd.Series:
+    return df.loc[df.index.to_list()[0].__class__(row)]  # transform to the correct type
 
 
 @fn.NodeDecorator(
@@ -321,12 +254,21 @@ class GetRowNode(fn.Node):
     name="Get Row by Index",
     description="Gets a row from a DataFrame by index.",
     outputs=[{"name": "row", "type": pd.Series}],
+    default_io_options={
+        "df": {
+            "on": {
+                "after_set_value": lambda src, result: src.node[
+                    "index"
+                ].update_value_options(min=0, max=len(result) - 1, step=1)
+            }
+        },
+    },
 )
 def df_iloc(
     df: pd.DataFrame,
-    index: Union[int],
+    index: int = 0,
 ) -> pd.Series:
-    return df.iloc[index]
+    return df.iloc[int(index)]
 
 
 @fn.NodeDecorator(
@@ -448,96 +390,42 @@ def numeric_only(df: pd.DataFrame, label_encode: bool = False) -> pd.DataFrame:
     return numeric_df
 
 
-class DropColumnNode(fn.Node):
-    node_id = "pd.drop_column"
-    node_name = "Drop Column"
-    df = fn.NodeInput(
-        "DataFrame",
-        type=pd.DataFrame,
-        uuid="df",
-    )
-
-    column = fn.NodeInput(
-        "Column",
-        type=str,
-        uuid="column",
-    )
-
-    out = fn.NodeOutput(
-        "New DataFrame",
-        type=pd.DataFrame,
-        uuid="out",
-    )
-
-    def __init__(self):
-        super().__init__()
-        self.get_input("df").on("after_set_value", self._update_columns)
-
-    def _update_columns(self, **kwargs):
-        try:
-            df = self.get_input("df").value
-            col = self.get_input("column")
-        except KeyError:
-            return
-        try:
-            col.update_value_options(options=list(df.columns))
-        except Exception:
-            col.update_value_options(options=[])
-
-    async def func(
-        self,
-        df: pd.DataFrame,
-        column: str,
-    ) -> pd.DataFrame:
-        df = df.drop(column, axis=1)
-        self.get_output("out").value = df
-        return df
+@fn.NodeDecorator(
+    node_id="pd.drop_column",
+    name="Drop Column",
+    description="Drops a column from a DataFrame.",
+    default_io_options={
+        "df": {
+            "on": {
+                "after_set_value": fn.decorator.update_other_io(
+                    "column",
+                    lambda x: list(x.columns),
+                )
+            }
+        },
+    },
+)
+def DropColumnNode(df: pd.DataFrame, column: str) -> pd.DataFrame:
+    return df.drop(column, axis=1)
 
 
-class DropRowNode(fn.Node):
-    node_id = "pd.drop_row"
-    node_name = "Drop Row"
-    df = fn.NodeInput(
-        "DataFrame",
-        type=pd.DataFrame,
-        uuid="df",
-    )
-
-    row = fn.NodeInput(
-        "Row",
-        type=str,
-        uuid="row",
-    )
-
-    out = fn.NodeOutput(
-        "New DataFrame",
-        type=pd.DataFrame,
-        uuid="out",
-    )
-
-    def __init__(self):
-        super().__init__()
-        self.get_input("df").on("after_set_value", self._update_rows)
-
-    def _update_rows(self, **kwargs):
-        try:
-            df = self.get_input("df").value
-            row = self.get_input("row")
-        except KeyError:
-            return
-        try:
-            row.update_value_options(options=list(df.index))
-        except Exception:
-            row.update_value_options(options=[])
-
-    async def func(
-        self,
-        df: pd.DataFrame,
-        row: str,
-    ) -> pd.DataFrame:
-        df = df.drop(row, axis=0)
-        self.get_output("out").value = df
-        return df
+@fn.NodeDecorator(
+    node_id="pd.drop_row",
+    name="Drop Row",
+    description="Drops a row from a DataFrame.",
+    default_io_options={
+        "df": {
+            "on": {
+                "after_set_value": fn.decorator.update_other_io(
+                    "row",
+                    lambda x: list(x.index),
+                )
+            }
+        },
+    },
+)
+def DropRowNode(df: pd.DataFrame, row: str) -> pd.DataFrame:
+    return df.drop(df.index.to_list()[0].__class__(row), axis=0)
 
 
 @fn.NodeDecorator(
