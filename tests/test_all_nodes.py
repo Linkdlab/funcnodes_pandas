@@ -92,6 +92,11 @@ class TestAllNodes(TestAllNodesBase):
         await ins
         pd.testing.assert_series_equal(ins.outputs["row"].value, self.df.iloc[0])
 
+        # check value options
+        self.assertEqual(ins.get_input("index").value_options["min"], 0)
+        self.assertEqual(ins.get_input("index").value_options["max"], len(self.df) - 1)
+        self.assertEqual(ins.get_input("index").value_options["step"], 1)
+
     async def test_to_csv_str(self):
         ins = fnpd.to_csv_str()
         ins.inputs["df"].value = self.df
