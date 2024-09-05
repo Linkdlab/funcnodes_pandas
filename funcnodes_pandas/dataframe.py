@@ -296,8 +296,12 @@ def dropna(
     df: pd.DataFrame,
     axis: Literal["index", "columns"] = "index",
     how: Literal["any", "all"] = "any",
+    subset: Optional[str] = None,
 ) -> pd.DataFrame:
-    return df.dropna(axis=axis, how=how)
+    if subset is not None:
+        subset = [s.strip() for s in subset.split(",")]
+
+    return df.dropna(axis=axis, how=how, subset=subset)
 
 
 @fn.NodeDecorator(
