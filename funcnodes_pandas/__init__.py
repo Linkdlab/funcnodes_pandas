@@ -32,6 +32,7 @@ from .dataframe import (
     add_column,
     add_row,
     concatenate,
+    merge,
 )
 
 from .dataseries import (
@@ -153,4 +154,5 @@ __all__ = [
     "describe",
     "group_to_list",
     "get_df_from_group",
+    "merge",
 ]

@@ -18,6 +18,7 @@ class TestAllNodes(TestAllNodesBase):
 
         self.series = self.df.iloc[0]
 
+    # region DataFrame
     async def test_to_dict(self):
         ins = fnpd.to_dict()
         ins.inputs["df"].value = self.df.fillna(0)
@@ -263,7 +264,21 @@ class TestAllNodes(TestAllNodesBase):
             ins.outputs["out"].value, pd.concat([self.df, self.df])
         )
 
-    # series
+    async def test_merge(self):
+        ins = fnpd.merge()
+        ins.inputs["df_left"].value = self.df
+        ins.inputs["df_right"].value = self.df
+        ins.inputs["left_on"].value = "A"
+        ins.inputs["right_on"].value = "A"
+
+        await ins
+        pd.testing.assert_frame_equal(
+            ins.outputs["df"].value,
+            pd.merge(self.df, self.df, left_on="A", right_on="A"),
+        )
+
+    # endregion DataFrame
+    # region series
 
     async def test_ser_to_dict(self):
         ins = fnpd.ser_to_dict()
@@ -318,7 +333,8 @@ class TestAllNodes(TestAllNodesBase):
 
         self.assertTrue(np.all(ins.outputs["values"].value == self.series.values))
 
-    # grouping
+    # endregion series
+    # region grouping
     async def test_groupby(self):
         ins = fnpd.group_by()
         ins.inputs["df"].value = self.df
@@ -416,3 +432,5 @@ class TestAllNodes(TestAllNodesBase):
         pd.testing.assert_frame_equal(
             ins.outputs["description"].value, self.df.groupby("A").describe()
         )
+
+    # endregion grouping

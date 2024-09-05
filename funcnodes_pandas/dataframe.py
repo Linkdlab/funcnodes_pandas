@@ -507,6 +507,40 @@ def concatenate(df1: pd.DataFrame, df2: pd.DataFrame) -> pd.DataFrame:
     return pd.concat([df1, df2])
 
 
+@fn.NodeDecorator(
+    node_id="pd.merge",
+    name="Merge",
+    description="Merges two DataFrames.",
+    outputs=[{"name": "df", "type": pd.DataFrame}],
+    default_io_options={
+        "df_left": {
+            "on": {
+                "after_set_value": fn.decorator.update_other_io(
+                    "left_on",
+                    lambda x: list(x.columns),
+                )
+            }
+        },
+        "df_right": {
+            "on": {
+                "after_set_value": fn.decorator.update_other_io(
+                    "right_on",
+                    lambda x: list(x.columns),
+                )
+            }
+        },
+    },
+)
+def merge(
+    df_left: pd.DataFrame,
+    df_right: pd.DataFrame,
+    how: Literal["inner", "outer", "left", "right"] = "inner",
+    left_on: Optional[str] = None,
+    right_on: Optional[str] = None,
+) -> pd.DataFrame:
+    return pd.merge(df_left, df_right, how=how, left_on=left_on, right_on=right_on)
+
+
 NODE_SHELF = fn.Shelf(
     nodes=[
         to_dict,
@@ -534,6 +568,7 @@ NODE_SHELF = fn.Shelf(
         add_column,
         add_row,
         concatenate,
+        merge,
     ],
     name="Datataframe",
     description="Pandas DataFrame nodes",
