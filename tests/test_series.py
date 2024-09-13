@@ -2,6 +2,9 @@ import unittest
 import funcnodes_pandas as fnpd
 import pandas as pd
 import numpy as np
+import funcnodes as fn
+
+fn.config.IN_NODE_TEST = True
 
 
 class TestSeriesStrConvert(unittest.IsolatedAsyncioTestCase):

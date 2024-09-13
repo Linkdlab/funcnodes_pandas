@@ -24,6 +24,7 @@ from ._manipulation import (  # noqa: F401
     DropRowNode,
     drop_columns,
     drop_rows,
+    reduce_df,
     add_column,
     add_row,
     df_concatenate,

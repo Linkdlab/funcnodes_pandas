@@ -12,6 +12,10 @@ from test_df import (
 from test_series import TestSeriesStrConvert, TestSeries
 from test_grouping import TestGrouping
 
+import funcnodes as fn
+
+fn.config.IN_NODE_TEST = True
+
 
 class TestAllNodes(TestAllNodesBase):
     sub_test_classes = [
