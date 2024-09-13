@@ -40,6 +40,10 @@ from .dataframe import (
     filter,
     mask,
     df_join,
+    # rows and columns
+    df_rename_col,
+    df_rename_cols_valid_identifier,
+    # end rows and columns
     # math
     df_corr,
     df_cov,
@@ -149,7 +153,7 @@ FUNCNODES_RENDER_OPTIONS: fn.RenderOptions = {
     },
 }
 
-__version__ = "0.2.5"
+__version__ = "0.2.6"
 
 __all__ = [
     "NODE_SHELF",
@@ -203,6 +207,11 @@ __all__ = [
     "df_join",
     "df_ilocs",
     "get_rows",
+    # df
+    # rows and columns
+    "df_rename_col",
+    "df_rename_cols_valid_identifier",
+    # end rows and columns
     # math
     "df_corr",
     "df_cov",
@@ -216,6 +225,7 @@ __all__ = [
     "df_value_counts",
     "df_eval",
     # end math
+    # end df
     # series
     # str
     "ser_str_contains",
