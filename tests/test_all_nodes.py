@@ -7,6 +7,7 @@ from test_df import (
     TestDataframeMask,
     TestDataframeMath,
     TestDataFrameRowsCols,
+    TestReduceDataFrameNode,
 )
 
 from test_series import TestSeriesStrConvert, TestSeries
@@ -27,4 +28,5 @@ class TestAllNodes(TestAllNodesBase):
         TestSeriesStrConvert,
         TestSeries,
         TestGrouping,
+        TestReduceDataFrameNode,
     ]
