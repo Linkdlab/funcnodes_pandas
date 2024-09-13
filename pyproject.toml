@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "funcnodes-pandas"
-version = "0.2.5"
+version = "0.2.6"
 description = ""
 authors = ["Julian Kimmig <julian.kimmig@gmx.net>"]
 license = "MIT"

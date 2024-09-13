@@ -55,6 +55,8 @@ from ._rows_cols import (  # noqa: F401
     df_iloc,
     get_rows,
     df_ilocs,
+    df_rename_col,
+    df_rename_cols_valid_identifier,
     ROW_COLS_SHELF,
 )
 from ._masking import (  # noqa: F401

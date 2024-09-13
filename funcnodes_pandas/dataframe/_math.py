@@ -2,6 +2,8 @@ import pandas as pd
 import funcnodes as fn
 from typing import Literal, List, Optional, Union
 
+from ..utils import to_valid_identifier
+
 
 @fn.NodeDecorator(
     node_id="pd.corr",
@@ -173,7 +175,15 @@ def df_eval(
     expr: str,
 ) -> Union[pd.Series, pd.DataFrame]:
     locals = df.to_dict(orient="series")
-    return pd.eval(expr, target=df, local_dict={**locals}, global_dict={})
+    renamed_locals = df.rename(
+        columns={col: to_valid_identifier(col) for col in df.columns}
+    ).to_dict(orient="series")
+    return pd.eval(
+        expr,
+        target=df,
+        local_dict={**locals, **renamed_locals, "df": df},
+        global_dict={},
+    )
 
 
 MATH_SHELF = fn.Shelf(
