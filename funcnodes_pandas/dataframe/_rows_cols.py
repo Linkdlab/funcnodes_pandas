@@ -1,7 +1,7 @@
 import pandas as pd
 import funcnodes as fn
 from typing import Any, List
-
+from ..utils import to_valid_identifier
 
 # region cols
 
@@ -145,6 +145,47 @@ def df_ilocs(
 # endregion rows
 
 
+@fn.NodeDecorator(
+    node_id="pd.df_rename_col",
+    name="Rename Column",
+    description="Renames a column in a DataFrame.",
+    default_io_options={
+        "df": {
+            "on": {
+                "after_set_value": fn.decorator.update_other_io(
+                    "old_name",
+                    lambda x: x.columns.to_list(),
+                )
+            }
+        },
+    },
+)
+def df_rename_col(
+    df: pd.DataFrame,
+    old_name: str,
+    new_name: str,
+) -> pd.DataFrame:
+    return df.rename(columns={old_name: new_name})
+
+
+@fn.NodeDecorator(
+    "pd.df_rename_cols_valid_identifier",
+    name="Rename Columns to Valid Identifiers",
+    description="Renames columns in a DataFrame to valid identifiers.",
+)
+def df_rename_cols_valid_identifier(
+    df: pd.DataFrame,
+) -> pd.DataFrame:
+    return df.rename(
+        columns={
+            col: to_valid_identifier(
+                col,
+            )
+            for col in df.columns
+        }
+    )
+
+
 ROW_COLS_SHELF = fn.Shelf(
     nodes=[
         GetColumnNode,
@@ -154,6 +195,8 @@ ROW_COLS_SHELF = fn.Shelf(
         df_iloc,
         get_rows,
         df_ilocs,
+        df_rename_col,
+        df_rename_cols_valid_identifier,
     ],
     name="Rows and Columns",
     description="OPeration on rows and columns",

@@ -397,6 +397,23 @@ class TestDataframeMath(unittest.IsolatedAsyncioTestCase):
         exp = self.df.eval("A + B")
         pd.testing.assert_series_equal(ins.outputs["result"].value, exp)
 
+    async def test_eval_with_non_conform_cols(self):
+        ins = fnpd.df_eval()
+        df = self.df.rename(
+            columns={"A": "2A", "B": "space col"},
+        )
+        ins.inputs["df"].value = df
+        ins.inputs["expr"].value = "D = _2A + space_col"
+        await ins
+
+        print(ins.outputs["result"].value)
+
+        exp = self.df.eval("D = A + B")
+        exp = exp.rename(
+            columns={"A": "2A", "B": "space col"},
+        )
+        pd.testing.assert_frame_equal(ins.outputs["result"].value, exp)
+
 
 class TestDataFrameRowsCols(unittest.IsolatedAsyncioTestCase):
     def setUp(self) -> None:
@@ -479,6 +496,28 @@ class TestDataFrameRowsCols(unittest.IsolatedAsyncioTestCase):
         ins.inputs["rows"].value = [0, 1]
         await ins
         pd.testing.assert_frame_equal(ins.outputs["out"].value, self.df.loc[[0, 1]])
+
+    async def test_df_rename_col(self):
+        ins = fnpd.df_rename_col()
+        ins.inputs["df"].value = self.df
+        ins.inputs["old_name"].value = "A"
+        ins.inputs["new_name"].value = "new_A"
+        await ins
+        pd.testing.assert_frame_equal(
+            ins.outputs["out"].value, self.df.rename(columns={"A": "new_A"})
+        )
+
+    async def test_df_rename_col_with_non_conform_cols(self):
+        ins = fnpd.df_rename_cols_valid_identifier()
+        df = self.df.rename(
+            columns={"A": "2A", "B": "space col"},
+        )
+        ins.inputs["df"].value = df
+
+        await ins
+        self.assertEqual(
+            ins.outputs["out"].value.columns.tolist(), ["_2A", "space_col", "C"]
+        )
 
 
 class TestReduceDataFrameNode(unittest.IsolatedAsyncioTestCase):
