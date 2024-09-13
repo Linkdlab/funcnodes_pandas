@@ -1,6 +1,9 @@
 import unittest
 import funcnodes_pandas as fnpd
 import pandas as pd
+import funcnodes as fn
+
+fn.config.IN_NODE_TEST = True
 
 
 class TestGrouping(unittest.IsolatedAsyncioTestCase):

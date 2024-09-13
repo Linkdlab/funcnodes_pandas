@@ -30,6 +30,7 @@ from .dataframe import (
     numeric_only,
     drop_columns,
     drop_rows,
+    reduce_df,
     DropColumnNode as drop_column,
     DropRowNode as drop_row,
     add_column,
@@ -148,7 +149,7 @@ FUNCNODES_RENDER_OPTIONS: fn.RenderOptions = {
     },
 }
 
-__version__ = "0.2.4"
+__version__ = "0.2.5"
 
 __all__ = [
     "NODE_SHELF",
@@ -185,6 +186,7 @@ __all__ = [
     "drop_rows",
     "drop_column",
     "drop_row",
+    "reduce_df",
     "add_column",
     "add_row",
     "df_describe",

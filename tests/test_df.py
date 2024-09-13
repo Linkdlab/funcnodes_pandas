@@ -4,6 +4,8 @@ import pandas as pd
 import funcnodes as fn
 import numpy as np
 
+fn.config.IN_NODE_TEST = True
+
 
 class TestDataframeConvert(unittest.IsolatedAsyncioTestCase):
     def setUp(self) -> None:
@@ -195,7 +197,8 @@ class TestDataframeManipulation(unittest.IsolatedAsyncioTestCase):
         ins.inputs["df"].value = self.df
         ins.inputs["column"].value = "D"
         ins.inputs["data"].value = [1, 2]
-        await ins
+        with self.assertRaises(fn.NodeTriggerError):
+            await ins
         self.assertEqual(ins.outputs["out"].value, fn.NoValue)
 
     async def test_add_row(self):
@@ -476,3 +479,170 @@ class TestDataFrameRowsCols(unittest.IsolatedAsyncioTestCase):
         ins.inputs["rows"].value = [0, 1]
         await ins
         pd.testing.assert_frame_equal(ins.outputs["out"].value, self.df.loc[[0, 1]])
+
+
+class TestReduceDataFrameNode(unittest.IsolatedAsyncioTestCase):
+    def setUp(self) -> None:
+        # Set up common DataFrame for testing
+        self.df = pd.DataFrame(
+            {
+                "A": [1, 1.02, 1.03, 1.10, 1.11, 120],
+                "B": [5, 5, 5, 10, 10, 20],
+                "C": [10, 20, 30, 40, 50, 60],
+            }
+        )
+
+    async def test_empty_dataframe(self):
+        df_empty = pd.DataFrame(columns=["A", "B"])
+        ins = fnpd.reduce_df()
+        ins.inputs["df"].value = df_empty
+        ins.inputs["on"].value = "A"
+
+        with self.assertRaises(fn.NodeTriggerError):
+            await ins
+
+    async def test_single_row(self):
+        df_single_row = pd.DataFrame({"A": [1], "B": [5]})
+        ins = fnpd.reduce_df()
+        ins.inputs["df"].value = df_single_row
+        ins.inputs["on"].value = "A"
+
+        await ins
+        pd.testing.assert_frame_equal(ins.outputs["reduced df"].value, df_single_row)
+
+    async def test_column_not_found(self):
+        ins = fnpd.reduce_df()
+        ins.inputs["df"].value = self.df
+        ins.inputs["on"].value = "D"  # Non-existing column
+
+        with self.assertRaises(fn.NodeTriggerError):
+            await ins
+
+    async def test_non_numeric_column(self):
+        df_non_numeric = self.df.copy()
+        df_non_numeric["D"] = ["a", "b", "c", "d", "e", "f"]
+
+        ins = fnpd.reduce_df()
+        ins.inputs["df"].value = df_non_numeric
+        ins.inputs["on"].value = "D"  # Non-numeric column
+
+        with self.assertRaises(fn.NodeTriggerError):
+            await ins
+
+    async def test_threshold_not_provided(self):
+        ins = fnpd.reduce_df()
+        ins.inputs["df"].value = self.df
+        ins.inputs["on"].value = "A"
+
+        await ins
+        print(ins.outputs["reduced df"].value)
+        expected = pd.DataFrame(
+            {"A": [1, 1.11, 120], "B": [5, 10, 20], "C": [10, 50, 60]}
+        ).reset_index(drop=True)
+
+        pd.testing.assert_frame_equal(ins.outputs["reduced df"].value, expected)
+
+    async def test_custom_threshold(self):
+        ins = fnpd.reduce_df()
+        ins.inputs["df"].value = self.df
+        ins.inputs["on"].value = "A"
+        ins.inputs["threshold"].value = 0.03
+
+        await ins
+        print(ins.outputs["reduced df"].value)
+        expected = pd.DataFrame(
+            {
+                "A": [1, 1.03, 1.10, 1.11, 120],
+                "B": [5, 5, 10, 10, 20],
+                "C": [10, 30, 40, 50, 60],
+            }
+        ).reset_index(drop=True)
+
+        pd.testing.assert_frame_equal(ins.outputs["reduced df"].value, expected)
+
+        ins.inputs["threshold"].value = 0.1
+
+        await ins
+        print(ins.outputs["reduced df"].value)
+        expected = pd.DataFrame(
+            {
+                "A": [1, 1.10, 1.11, 120],
+                "B": [5, 10, 10, 20],
+                "C": [10, 40, 50, 60],
+            }
+        ).reset_index(drop=True)
+        pd.testing.assert_frame_equal(ins.outputs["reduced df"].value, expected)
+
+    async def test_multiple_columns(self):
+        ins = fnpd.reduce_df()
+        ins.inputs["df"].value = self.df
+        ins.inputs["on"].value = ["A", "B"]
+
+        await ins
+
+        expected = pd.DataFrame(
+            {
+                "A": [1, 1.03, 1.10, 1.11, 120],
+                "B": [5, 5, 10, 10, 20],
+                "C": [10, 30, 40, 50, 60],
+            }
+        ).reset_index(drop=True)
+        pd.testing.assert_frame_equal(ins.outputs["reduced df"].value, expected)
+
+    async def test_custom_threshold_multiple_columns(self):
+        ins = fnpd.reduce_df()
+        ins.inputs["df"].value = self.df
+        ins.inputs["on"].value = ["A", "B"]
+        ins.inputs["threshold"].value = [0.1, 5]
+
+        await ins
+        print(ins.outputs["reduced df"].value)
+        expected = pd.DataFrame(
+            {"A": [1, 1.1, 1.11, 120], "B": [5, 10, 10, 20], "C": [10, 40, 50, 60]}
+        ).reset_index(drop=True)
+
+        pd.testing.assert_frame_equal(ins.outputs["reduced df"].value, expected)
+
+    async def test_percentage_threshold(self):
+        ins = fnpd.reduce_df()
+        ins.inputs["df"].value = self.df
+        ins.inputs["on"].value = "B"
+        ins.inputs["percentage_threshold"].value = 0.5
+
+        await ins
+        print(ins.outputs["reduced df"].value)
+        expected = pd.DataFrame(
+            {
+                "A": [1, 1.11, 120],
+                "B": [5, 10, 20],
+                "C": [10, 50, 60],
+            }
+        ).reset_index(drop=True)
+
+        pd.testing.assert_frame_equal(ins.outputs["reduced df"].value, expected)
+
+    async def test_strong_reduce_df(self):
+        ins = fnpd.reduce_df()
+        x = np.arange(1000)
+        y = np.random.rand(1000)
+        y[200:400] += 200
+        df = pd.DataFrame(
+            {
+                "x": x,
+                "y": y,
+            }
+        )
+        ins.inputs["df"].value = df
+        ins.inputs["on"].value = "y"
+
+        await ins
+
+        print(ins.outputs["reduced df"].value)
+        expected = pd.DataFrame(
+            {
+                "x": [0, 199, 200, 399, 400, 999],
+                "y": df.iloc[[0, 199, 200, 399, 400, 999]]["y"],
+            }
+        ).reset_index(drop=True)
+
+        pd.testing.assert_frame_equal(ins.outputs["reduced df"].value, expected)
