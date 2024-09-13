@@ -5,7 +5,7 @@ from typing import List
 
 
 @fn.NodeDecorator(
-    node_id="pd.groupby_column",
+    node_id="pd.gr.groupby_column",
     name="Group By Column",
     description="Groups a DataFrame by a column.",
     outputs=[{"name": "group"}],
@@ -29,7 +29,7 @@ def GroupByColumnNode(
 
 
 @fn.NodeDecorator(
-    node_id="pd.groupby",
+    node_id="pd.gr.groupby",
     name="Group By",
     description="Groups a DataFrame by a column.",
     outputs=[{"name": "grouped", "type": pd.DataFrame}],
@@ -44,91 +44,91 @@ def group_by(
 
 
 @fn.NodeDecorator(
-    node_id="pd.mean",
+    node_id="pd.gr.mean",
     name="Mean",
     description="Calculates the mean of a DataFrameGroup.",
     outputs=[{"name": "mean", "type": pd.DataFrame}],
 )
-def mean(
+def gr_mean(
     group: DataFrameGroupBy,
 ) -> pd.DataFrame:
     return group.mean()
 
 
 @fn.NodeDecorator(
-    node_id="pd.sum",
+    node_id="pd.gr.sum",
     name="Sum",
     description="Calculates the sum of a DataFrameGroup.",
     outputs=[{"name": "sum", "type": pd.DataFrame}],
 )
-def sum(
+def gr_sum(
     group: DataFrameGroupBy,
 ) -> pd.DataFrame:
     return group.sum()
 
 
 @fn.NodeDecorator(
-    node_id="pd.max",
+    node_id="pd.gr.max",
     name="Max",
     description="Calculates the max of a DataFrameGroup.",
     outputs=[{"name": "max", "type": pd.DataFrame}],
 )
-def max(
+def gr_max(
     group: DataFrameGroupBy,
 ) -> pd.DataFrame:
     return group.max()
 
 
 @fn.NodeDecorator(
-    node_id="pd.min",
+    node_id="pd.gr.min",
     name="Min",
     description="Calculates the min of a DataFrameGroup.",
     outputs=[{"name": "min", "type": pd.DataFrame}],
 )
-def min(
+def gr_min(
     group: DataFrameGroupBy,
 ) -> pd.DataFrame:
     return group.min()
 
 
 @fn.NodeDecorator(
-    node_id="pd.std",
+    node_id="pd.gr.std",
     name="Standard Deviation",
     description="Calculates the standard deviation of a DataFrameGroup.",
     outputs=[{"name": "std", "type": pd.DataFrame}],
 )
-def std(
+def gr_std(
     group: DataFrameGroupBy,
 ) -> pd.DataFrame:
     return group.std()
 
 
 @fn.NodeDecorator(
-    node_id="pd.var",
+    node_id="pd.gr.var",
     name="Variance",
     description="Calculates the variance of a DataFrameGroup.",
     outputs=[{"name": "var", "type": pd.DataFrame}],
 )
-def var(
+def gr_var(
     group: DataFrameGroupBy,
 ) -> pd.DataFrame:
     return group.var()
 
 
 @fn.NodeDecorator(
-    node_id="pd.count",
+    node_id="pd.gr.count",
     name="Count",
     description="Calculates the count of a DataFrameGroup.",
     outputs=[{"name": "count", "type": pd.DataFrame}],
 )
-def count(
+def gr_count(
     group: DataFrameGroupBy,
 ) -> pd.DataFrame:
     return group.count()
 
 
 @fn.NodeDecorator(
-    node_id="pd.describe",
+    node_id="pd.gr.describe",
     name="Describe",
     description="Describes a DataFrameGroup.",
     outputs=[
@@ -137,14 +137,14 @@ def count(
         }
     ],
 )
-def describe(
+def gr_describe(
     group: DataFrameGroupBy,
 ) -> pd.DataFrame:
     return group.describe()
 
 
 @fn.NodeDecorator(
-    node_id="pd.group_to_list",
+    node_id="pd.gr.group_to_list",
     name="Group to List",
     description="Converts a DataFrameGroup to a list of DataFrames.",
     outputs=[{"name": "list", "type": list}],
@@ -156,7 +156,7 @@ def group_to_list(
 
 
 @fn.NodeDecorator(
-    node_id="pd.get_df_from_group",
+    node_id="pd.gr.get_df_from_group",
     name="Get DataFrame from Group",
     description="Gets a DataFrame from a DataFrameGroup.",
     outputs=[{"name": "df"}],
@@ -183,14 +183,14 @@ NODE_SHELF = fn.Shelf(
     nodes=[
         GroupByColumnNode,
         group_by,
-        mean,
-        sum,
-        max,
-        min,
-        std,
-        var,
-        count,
-        describe,
+        gr_mean,
+        gr_sum,
+        gr_max,
+        gr_min,
+        gr_std,
+        gr_var,
+        gr_count,
+        gr_describe,
         group_to_list,
         GetDFfromGroupNode,
     ],

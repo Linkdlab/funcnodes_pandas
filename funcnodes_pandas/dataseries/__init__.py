@@ -2,6 +2,8 @@ from typing import Union, Any, Optional
 import funcnodes as fn
 import numpy as np
 import pandas
+from ._str import SERIES_STR_SHELF
+from ._str import *  # noqa: F401, F403
 
 
 @fn.NodeDecorator(
@@ -125,5 +127,5 @@ NODE_SHELF = fn.Shelf(
         ser_from_list,
     ],
     description="Pandas Series nodes",
-    subshelves=[],
+    subshelves=[SERIES_STR_SHELF],
 )
