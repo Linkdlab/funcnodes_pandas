@@ -4,7 +4,7 @@ from typing import Optional, Literal, Union, List
 from ._types import DataFrameDict, SepEnum, DecimalEnum
 from io import StringIO, BytesIO
 import numpy as np
-
+from funcnodes_basic.strings import POSSIBLE_DECODINGS_TYPE
 # region dict
 
 
@@ -109,18 +109,41 @@ def from_orient_dict(
     name="From CSV",
     description="Reads a CSV file into a DataFrame.",
     outputs=[{"name": "df", "type": pd.DataFrame}],
+    default_io_options={
+        "skiprows": {
+            "hidden": True,
+        },
+        "thousands": {
+            "hidden": True,
+        },
+        "encoding": {
+            "hidden": True,
+        },
+    },
 )
 def from_csv_str(
     source: str,
     sep: SepEnum = ",",
     decimal: DecimalEnum = ".",
     thousands: Optional[DecimalEnum] = None,
+    skiprows: Optional[int] = None,
+    encoding: POSSIBLE_DECODINGS_TYPE = "utf-8",
 ) -> pd.DataFrame:
     sep = SepEnum.v(sep)
     decimal = DecimalEnum.v(decimal)
     thousands = DecimalEnum.v(thousands) if thousands is not None else None
-
-    return pd.read_csv(StringIO(source), sep=sep, decimal=decimal, thousands=thousands)
+    if isinstance(source, bytes):
+        data = BytesIO(source)
+    else:
+        data = StringIO(source)
+    return pd.read_csv(
+        data,
+        sep=sep,
+        decimal=decimal,
+        thousands=thousands,
+        skiprows=skiprows,
+        encoding=encoding,
+    )
 
 
 @fn.NodeDecorator(

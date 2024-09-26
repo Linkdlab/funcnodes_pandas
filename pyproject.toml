@@ -1,14 +1,20 @@
 [tool.poetry]
 name = "funcnodes-pandas"
-version = "0.2.6"
-description = ""
+version = "0.2.7"
+description = "pandas nodes for funcnodes"
 authors = ["Julian Kimmig <julian.kimmig@gmx.net>"]
 license = "MIT"
 readme = "README.md"
 
+[tool.poetry.urls]
+homepage  = "https://github.com/Linkdlab/funcnodes_pandas"
+source  = "https://github.com/Linkdlab/funcnodes_pandas"
+tracker  = "https://github.com/Linkdlab/funcnodes_pandas/issues"
+download = "https://pypi.org/project/funcnodes-pandas/#files"
+
 [tool.poetry.dependencies]
 python = ">=3.11"
-funcnodes =">=0.4.9"
+funcnodes ="*"
 pandas = "*"
 funcnodes-numpy = "*"
 openpyxl = "*"
