@@ -153,7 +153,7 @@ FUNCNODES_RENDER_OPTIONS: fn.RenderOptions = {
     },
 }
 
-__version__ = "0.2.6"
+__version__ = "0.2.7"
 
 __all__ = [
     "NODE_SHELF",
