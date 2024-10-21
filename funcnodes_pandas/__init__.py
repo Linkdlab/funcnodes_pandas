@@ -129,14 +129,13 @@ def encode_pdDf(obj, preview=False):
             )
     if isinstance(obj, pd.Series):
         return fn.Encdata(
-            obj.to_list(),
+            obj.values,
             handeled=True,
-            continue_preview=False,
         )
     return fn.Encdata(obj, handeled=False)
 
 
-fn.JSONEncoder.add_encoder(encode_pdDf)
+fn.JSONEncoder.add_encoder(encode_pdDf, [pd.DataFrame, pd.Series])
 
 
 NODE_SHELF = fn.Shelf(
@@ -153,7 +152,7 @@ FUNCNODES_RENDER_OPTIONS: fn.RenderOptions = {
     },
 }
 
-__version__ = "0.2.7"
+__version__ = "0.2.8"
 
 __all__ = [
     "NODE_SHELF",
