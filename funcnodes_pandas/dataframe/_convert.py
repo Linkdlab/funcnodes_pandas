@@ -232,17 +232,19 @@ def df_to_xls(
     df: pd.DataFrame,
     sheet_name: str = "Sheet1",
     with_index: bool = False,
-    exceldata: Optional[BytesIO] = None,
+    exceldata: Optional[bytes] = None,
 ) -> bytes:
     if exceldata is None:
         output = BytesIO()
         mode = "w"
     else:
-        output = exceldata
+        output = BytesIO(exceldata)
         mode = "a"
     with pd.ExcelWriter(output, engine="openpyxl", mode=mode) as writer:
         df.to_excel(writer, sheet_name=sheet_name, index=with_index)
-    return output.getvalue()
+    data = output.getvalue()
+    output.close()
+    return data
 
 
 # endregion excel
