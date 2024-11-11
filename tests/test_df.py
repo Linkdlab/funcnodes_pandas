@@ -94,6 +94,54 @@ class TestDataframeConvert(unittest.IsolatedAsyncioTestCase):
         await ins
         self.assertEqual(ins.outputs["csv"].value, self.df.to_csv(index=False))
 
+    async def test_df_from_csv_auto(self):
+        ins = fnpd.from_csv_auto()
+        larger_df = pd.concat([self.df] * 10).reset_index(drop=True)
+
+        # gernate random header data
+        headerdata = {
+            "name": "test",
+            "age": 20,
+            "raddata": list(range(10)),
+        }
+
+        headerstring = ""
+        for key, value in headerdata.items():
+            if isinstance(value, list):
+                value = ",".join(map(str, value))
+            headerstring += f"{key}: {value}\n"
+
+        possible_delimiters = [
+            ",",
+            "\t",
+            " " * 1,
+            ";",
+            "|",
+        ]
+
+        possible_decimal_separators = [".", ","]
+
+        for delimiters in possible_delimiters:
+            for dec in possible_decimal_separators:
+                if dec == delimiters:
+                    continue
+                csv_string = larger_df.to_csv(index=False, sep=delimiters, decimal=dec)
+                self.assertIsInstance(csv_string, str)
+                csv_string = headerstring + csv_string
+                ins.inputs["source"].value = csv_string
+                await ins
+                params = ins.outputs["params"].value
+                # print(params)
+                # print(ins.outputs["df"].value)
+                # print(csv_string)
+                pd.testing.assert_frame_equal(
+                    ins.outputs["df"].value,
+                    larger_df,
+                )
+                self.assertEqual(params["sep"], delimiters, params)
+                self.assertEqual(params["decimal"], dec, params)
+                self.assertEqual(params["skiprows"], len(headerdata), params)
+
 
 class TestDataframeManipulation(unittest.IsolatedAsyncioTestCase):
     def setUp(self) -> None:
