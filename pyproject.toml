@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "funcnodes-pandas"
-version = "0.2.9"
+version = "0.2.10"
 description = "pandas nodes for funcnodes"
 authors = ["Julian Kimmig <julian.kimmig@gmx.net>"]
 license = "MIT"
@@ -25,6 +25,7 @@ chardet = "*"
 pytest = "*"
 pre-commit = "*"
 funcnodes-module = "^0.1.19"
+ipykernel = "^6.29.5"
 
 [build-system]
 requires = ["poetry-core"]
