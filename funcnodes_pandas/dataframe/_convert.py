@@ -1,10 +1,11 @@
 import pandas as pd
 import funcnodes as fn
-from typing import Optional, Literal, Union, List
+from typing import Optional, Literal, Union, List, Tuple
 from ._types import DataFrameDict, SepEnum, DecimalEnum
 from io import StringIO, BytesIO
 import numpy as np
 from funcnodes_basic.strings import POSSIBLE_DECODINGS_TYPE
+from ._autoreader import auto_parse_table
 # region dict
 
 
@@ -122,7 +123,7 @@ def from_orient_dict(
     },
 )
 def from_csv_str(
-    source: str,
+    source: Union[str, bytes],
     sep: SepEnum = ",",
     decimal: DecimalEnum = ".",
     thousands: Optional[DecimalEnum] = None,
@@ -164,6 +165,31 @@ def to_csv_str(
     thousands = DecimalEnum.v(thousands) if thousands is not None else None
 
     return df.to_csv(sep=sep, decimal=decimal, index=index)
+
+
+@fn.NodeDecorator(
+    node_id="pd.df_from_csv_auto",
+    name="From CSV Auto",
+    description="Reads a CSV file into a DataFrame. Automatically detects the parameters.",
+    outputs=[{"name": "df"}, {"name": "params"}],
+)
+def from_csv_auto(
+    source: Union[str, bytes],
+    possible_delimiters: List[str] = None,
+    possible_decimal_separators: List[str] = None,
+    possible_thousands_separators: List[str] = None,
+    max_lines: int = 200,
+    cutoff_ratio: float = 0.5,
+) -> Tuple[pd.DataFrame, dict]:
+    df, params = auto_parse_table(
+        source,
+        possible_delimiters=possible_delimiters,
+        possible_decimal_separators=possible_decimal_separators,
+        possible_thousands_separators=possible_thousands_separators,
+        max_lines=max_lines,
+        cutoff_ratio=cutoff_ratio,
+    )
+    return df, params
 
 
 # endregion csv
@@ -242,6 +268,7 @@ CONVERT_SHELF = fn.Shelf(
     nodes=[
         to_dict,
         from_dict,
+        from_csv_auto,
         from_csv_str,
         to_csv_str,
         to_orient_dict,

@@ -29,7 +29,6 @@ runs:
         poetry config virtualenvs.create true --local
         poetry config virtualenvs.in-project true --local
 
-
     - name: Install Dependencies
       shell: bash
       run: |

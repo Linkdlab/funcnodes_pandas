@@ -9,6 +9,7 @@ from .dataframe import (
     to_dict,
     from_dict,
     from_csv_str,
+    from_csv_auto,
     GetColumnNode as get_column,
     SetColumnNode as set_column,
     to_orient_dict,
@@ -152,13 +153,14 @@ FUNCNODES_RENDER_OPTIONS: fn.RenderOptions = {
     },
 }
 
-__version__ = "0.2.8"
+__version__ = "0.2.9"
 
 __all__ = [
     "NODE_SHELF",
     "to_dict",
     "from_dict",
     "from_csv_str",
+    "from_csv_auto",
     "get_column",
     "to_orient_dict",
     "from_orient_dict",

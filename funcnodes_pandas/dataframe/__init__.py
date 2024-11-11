@@ -5,6 +5,7 @@ from ._convert import (  # noqa: F401
     to_dict,
     from_dict,
     from_csv_str,
+    from_csv_auto,
     to_csv_str,
     to_orient_dict,
     from_orient_dict,
