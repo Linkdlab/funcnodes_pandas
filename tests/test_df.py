@@ -85,7 +85,7 @@ class TestDataframeConvert(unittest.IsolatedAsyncioTestCase):
         ins.inputs["data"].value = self.df.to_numpy()
         await ins
         df = self.df.copy()
-        df.columns = [f"Col {i+1}" for i in range(len(df.columns))]
+        df.columns = [f"Col {i + 1}" for i in range(len(df.columns))]
         pd.testing.assert_frame_equal(ins.outputs["df"].value, df, check_dtype=False)
 
     async def test_to_csv_str(self):
