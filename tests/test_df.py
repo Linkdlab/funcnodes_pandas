@@ -4,8 +4,6 @@ import pandas as pd
 import funcnodes as fn
 import numpy as np
 
-fn.config.IN_NODE_TEST = True
-
 
 class TestDataframeConvert(unittest.IsolatedAsyncioTestCase):
     def setUp(self) -> None:
