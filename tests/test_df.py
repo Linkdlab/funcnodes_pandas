@@ -733,3 +733,25 @@ class TestReduceDataFrameNode(unittest.IsolatedAsyncioTestCase):
         ).reset_index(drop=True)
 
         pd.testing.assert_frame_equal(ins.outputs["reduced df"].value, expected)
+
+
+class TestDataframeOther(unittest.IsolatedAsyncioTestCase):
+    def setUp(self) -> None:
+        self.df = pd.DataFrame(
+            data={
+                "A": [1, 2, 3],
+                "B": [4, 5, 6],
+                "C": [1.1, 2.2, None],
+            }
+        )
+
+        self.series = self.df.iloc[0]
+
+    async def test_display_df(self):
+        ins = fnpd.display_df()
+        ins.inputs["df"].value = self.df
+        await ins
+
+        ins.inputs["df"].value = self.series
+        with self.assertRaises(fn.NodeTriggerError):
+            await ins
