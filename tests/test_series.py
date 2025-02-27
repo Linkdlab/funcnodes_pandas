@@ -2,13 +2,12 @@ import unittest
 import funcnodes_pandas as fnpd
 import pandas as pd
 import numpy as np
-import funcnodes as fn
-
-fn.config.IN_NODE_TEST = True
+from funcnodes_core import testing
 
 
 class TestSeriesStrConvert(unittest.IsolatedAsyncioTestCase):
     def setUp(self) -> None:
+        testing.setup()
         self.df = pd.DataFrame(
             data={
                 "A": ["foo", "bar", "baz"],
@@ -18,6 +17,9 @@ class TestSeriesStrConvert(unittest.IsolatedAsyncioTestCase):
         )
 
         self.col = self.df["A"]
+
+    def tearDown(self):
+        testing.teardown()
 
     async def test_ser_str_contains(self):
         ins = fnpd.ser_str_contains()
@@ -316,6 +318,7 @@ class TestSeriesStrConvert(unittest.IsolatedAsyncioTestCase):
 
 class TestSeries(unittest.IsolatedAsyncioTestCase):
     def setUp(self) -> None:
+        testing.setup()
         self.df = pd.DataFrame(
             data={
                 "A": [1, 2, 3],
@@ -325,6 +328,9 @@ class TestSeries(unittest.IsolatedAsyncioTestCase):
         )
 
         self.series = self.df.iloc[0]
+
+    def tearDown(self):
+        testing.teardown()
 
     async def test_ser_to_list(self):
         ins = fnpd.ser_to_list()

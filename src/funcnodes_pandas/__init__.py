@@ -5,6 +5,7 @@ import funcnodes_numpy as fnnp  # noqa: F401
 import pandas as pd
 from exposedfunctionality.function_parser.types import type_to_string
 from .dataframe import (
+    display_df,
     NODE_SHELF as DF_SHELF,
     to_dict,
     from_dict,
@@ -153,9 +154,10 @@ FUNCNODES_RENDER_OPTIONS: fn.RenderOptions = {
     },
 }
 
-__version__ = "0.2.11"
+__version__ = "0.2.12"
 
 __all__ = [
+    "display_df",
     "NODE_SHELF",
     "to_dict",
     "from_dict",

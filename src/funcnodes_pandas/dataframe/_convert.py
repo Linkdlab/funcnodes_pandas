@@ -265,7 +265,7 @@ def df_from_array(
     index: List[Union[str, int, float]] = None,
 ) -> pd.DataFrame:
     if columns is None:
-        columns = [f"Col {i+1}" for i in range(len(data[0]))]
+        columns = [f"Col {i + 1}" for i in range(len(data[0]))]
     return pd.DataFrame(data, columns=columns, index=index)
 
 
