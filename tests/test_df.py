@@ -3,10 +3,12 @@ import funcnodes_pandas as fnpd
 import pandas as pd
 import funcnodes as fn
 import numpy as np
+from funcnodes_core import testing
 
 
 class TestDataframeConvert(unittest.IsolatedAsyncioTestCase):
     def setUp(self) -> None:
+        testing.setup()
         self.df = pd.DataFrame(
             data={
                 "A": [1, 2, 3],
@@ -16,6 +18,9 @@ class TestDataframeConvert(unittest.IsolatedAsyncioTestCase):
         )
 
         self.series = self.df.iloc[0]
+
+    def tearDown(self):
+        testing.teardown()
 
     async def test_to_dict(self):
         ins = fnpd.to_dict()
@@ -143,6 +148,7 @@ class TestDataframeConvert(unittest.IsolatedAsyncioTestCase):
 
 class TestDataframeManipulation(unittest.IsolatedAsyncioTestCase):
     def setUp(self) -> None:
+        testing.setup()
         self.df = pd.DataFrame(
             data={
                 "A": [1, 2, 3],
@@ -152,6 +158,9 @@ class TestDataframeManipulation(unittest.IsolatedAsyncioTestCase):
         )
 
         self.series = self.df.iloc[0]
+
+    def tearDown(self):
+        testing.teardown()
 
     async def test_dropna(self):
         ins = fnpd.dropna()
@@ -310,6 +319,7 @@ class TestDataframeManipulation(unittest.IsolatedAsyncioTestCase):
 
 class TestDataframeMask(unittest.IsolatedAsyncioTestCase):
     def setUp(self) -> None:
+        testing.setup()
         self.df = pd.DataFrame(
             data={
                 "A": [1, 2, 3],
@@ -319,6 +329,9 @@ class TestDataframeMask(unittest.IsolatedAsyncioTestCase):
         )
 
         self.series = self.df.iloc[0]
+
+    def tearDown(self):
+        testing.teardown()
 
     async def test_filter(self):
         ins = fnpd.filter()
@@ -355,6 +368,7 @@ class TestDataframeMath(unittest.IsolatedAsyncioTestCase):
     """
 
     def setUp(self) -> None:
+        testing.setup()
         self.df = pd.DataFrame(
             data={
                 "A": [1, 2, 3],
@@ -362,6 +376,9 @@ class TestDataframeMath(unittest.IsolatedAsyncioTestCase):
                 "C": [1.1, 2.2, None],
             }
         )
+
+    def tearDown(self):
+        testing.teardown()
 
     async def test_corr(self):
         ins = fnpd.df_corr()
@@ -463,6 +480,7 @@ class TestDataframeMath(unittest.IsolatedAsyncioTestCase):
 
 class TestDataFrameRowsCols(unittest.IsolatedAsyncioTestCase):
     def setUp(self) -> None:
+        testing.setup()
         self.df = pd.DataFrame(
             data={
                 "A": [1, 2, 3],
@@ -472,6 +490,9 @@ class TestDataFrameRowsCols(unittest.IsolatedAsyncioTestCase):
         )
 
         self.series = self.df.iloc[0]
+
+    def tearDown(self):
+        testing.teardown()
 
     async def test_get_column(self):
         ins = fnpd.get_column()
@@ -568,6 +589,7 @@ class TestDataFrameRowsCols(unittest.IsolatedAsyncioTestCase):
 
 class TestReduceDataFrameNode(unittest.IsolatedAsyncioTestCase):
     def setUp(self) -> None:
+        testing.setup()
         # Set up common DataFrame for testing
         self.df = pd.DataFrame(
             {
@@ -576,6 +598,9 @@ class TestReduceDataFrameNode(unittest.IsolatedAsyncioTestCase):
                 "C": [10, 20, 30, 40, 50, 60],
             }
         )
+
+    def tearDown(self):
+        testing.teardown()
 
     async def test_empty_dataframe(self):
         df_empty = pd.DataFrame(columns=["A", "B"])
@@ -735,6 +760,7 @@ class TestReduceDataFrameNode(unittest.IsolatedAsyncioTestCase):
 
 class TestDataframeOther(unittest.IsolatedAsyncioTestCase):
     def setUp(self) -> None:
+        testing.setup()
         self.df = pd.DataFrame(
             data={
                 "A": [1, 2, 3],
@@ -744,6 +770,9 @@ class TestDataframeOther(unittest.IsolatedAsyncioTestCase):
         )
 
         self.series = self.df.iloc[0]
+
+    def tearDown(self):
+        testing.teardown()
 
     async def test_display_df(self):
         ins = fnpd.display_df()

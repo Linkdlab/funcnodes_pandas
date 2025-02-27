@@ -1,10 +1,12 @@
 import unittest
 import funcnodes_pandas as fnpd
 import pandas as pd
+from funcnodes_core import testing
 
 
 class TestGrouping(unittest.IsolatedAsyncioTestCase):
     def setUp(self) -> None:
+        testing.setup()
         self.df = pd.DataFrame(
             data={
                 "A": [1, 2, 3],
@@ -14,6 +16,9 @@ class TestGrouping(unittest.IsolatedAsyncioTestCase):
         )
 
         self.series = self.df.iloc[0]
+
+    def tearDown(self):
+        testing.teardown()
 
     async def test_groupby(self):
         ins = fnpd.group_by()
