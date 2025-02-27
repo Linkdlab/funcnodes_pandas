@@ -8,14 +8,11 @@ from test_df import (
     TestDataframeMath,
     TestDataFrameRowsCols,
     TestReduceDataFrameNode,
+    TestDataframeOther,
 )
 
 from test_series import TestSeriesStrConvert, TestSeries
 from test_grouping import TestGrouping
-
-import funcnodes as fn
-
-fn.config.IN_NODE_TEST = True
 
 
 class TestAllNodes(TestAllNodesBase):
@@ -29,4 +26,5 @@ class TestAllNodes(TestAllNodesBase):
         TestSeries,
         TestGrouping,
         TestReduceDataFrameNode,
+        TestDataframeOther,
     ]

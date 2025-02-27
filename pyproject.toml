@@ -1,36 +1,51 @@
-[tool.poetry]
+[project]
 name = "funcnodes-pandas"
-version = "0.2.11"
+version = "0.2.12"
 description = "pandas nodes for funcnodes"
-authors = ["Julian Kimmig <julian.kimmig@gmx.net>"]
-license = "MIT"
 readme = "README.md"
+classifiers = [
+    "License :: OSI Approved :: GNU Affero General Public License v3 or later (AGPLv3+)",
+    "Programming Language :: Python :: 3",
+]
+dependencies = [
+ "funcnodes",
+ "pandas",
+ "funcnodes-numpy",
+ "openpyxl",
+ "chardet",
+]
+requires-python = ">=3.11"
+[[project.authors]]
+name = "Julian Kimmig"
+email = "julian.kimmig@gmx.net"
 
-[tool.poetry.urls]
-homepage  = "https://github.com/Linkdlab/funcnodes_pandas"
-source  = "https://github.com/Linkdlab/funcnodes_pandas"
-tracker  = "https://github.com/Linkdlab/funcnodes_pandas/issues"
-download = "https://pypi.org/project/funcnodes-pandas/#files"
-
-[tool.poetry.dependencies]
-python = ">=3.11"
-funcnodes ="*"
-pandas = "*"
-funcnodes-numpy = "*"
-openpyxl = "*"
-chardet = "*"
-
-
-[tool.poetry.group.dev.dependencies]
-pytest = "*"
-pre-commit = "*"
-funcnodes-module = "^0.1.19"
-ipykernel = "^6.29.5"
+[dependency-groups]
+dev = [
+ "pytest",
+ "pre-commit",
+ "funcnodes-module>=0.1.19",
+ "ipykernel>=6.29.5",
+]
 
 [build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+requires = [ "setuptools>=42",]
+build-backend = "setuptools.build_meta"
 
-[tool.poetry.plugins."funcnodes.module"]
+[project.license]
+text = "AGPL-3.0"
+
+[project.urls]
+homepage = "https://github.com/Linkdlab/funcnodes_pandas"
+source = "https://github.com/Linkdlab/funcnodes_pandas"
+tracker = "https://github.com/Linkdlab/funcnodes_pandas/issues"
+download = "https://pypi.org/project/funcnodes-pandas/#files"
+
+[tool.setuptools.package-dir]
+"" = "src"
+
+[project.entry-points."funcnodes.module"]
 module = "funcnodes_pandas"
 shelf = "funcnodes_pandas:NODE_SHELF"
+
+[tool.setuptools.packages.find]
+where = [ "src",]

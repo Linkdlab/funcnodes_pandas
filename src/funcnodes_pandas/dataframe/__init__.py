@@ -13,6 +13,7 @@ from ._convert import (  # noqa: F401
     DfFromExcelNode,
     df_to_xls,
     CONVERT_SHELF,
+    pd,
 )
 from ._manipulation import (  # noqa: F401
     dropna,
@@ -66,8 +67,20 @@ from ._masking import (  # noqa: F401
     MASK_SHELF,
 )
 
+
+@fn.NodeDecorator(
+    node_id="pd.displaydf",
+    name="Display",
+    description="Helper node to display a DataFrame.",
+    default_render_options={"data": {"src": "df", "type": "table"}},
+)
+def display_df(df: pd.DataFrame):
+    if not isinstance(df, pd.DataFrame):
+        raise ValueError(f"Expected a DataFrame, got {type(df)}")
+
+
 NODE_SHELF = fn.Shelf(
-    nodes=[],
+    nodes=[display_df],
     name="Datataframe",
     description="Pandas DataFrame nodes",
     subshelves=[
