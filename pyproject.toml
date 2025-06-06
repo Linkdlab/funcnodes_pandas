@@ -26,6 +26,7 @@ dev = [
  "funcnodes-module>=0.1.19",
  "ipykernel>=6.29.5",
  "pytest-funcnodes>=0.1.0",
+ "commitizen>=4.8.2",
 ]
 
 [build-system]
