@@ -67,7 +67,7 @@ def ser_to_list(
     default_io_options={
         "ser": {
             "on": {
-                "after_set_value": fn.decorator.update_other_io(
+                "after_set_value": fn.decorator.update_other_io_options(
                     "label",
                     lambda x: list(x.index),
                 )
@@ -92,9 +92,9 @@ def ser_loc(
     default_io_options={
         "ser": {
             "on": {
-                "after_set_value": lambda src, result: src.node[
-                    "index"
-                ].update_value_options(min=0, max=len(result) - 1, step=1)
+                "after_set_value": fn.decorator.update_other_io_value_options(
+                    "index", lambda result: dict(min=0, max=len(result) - 1, step=1)
+                )
             }
         },
     },

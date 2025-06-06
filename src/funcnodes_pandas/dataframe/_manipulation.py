@@ -148,7 +148,7 @@ def numeric_only(df: pd.DataFrame, label_encode: bool = False) -> pd.DataFrame:
     default_io_options={
         "df": {
             "on": {
-                "after_set_value": fn.decorator.update_other_io(
+                "after_set_value": fn.decorator.update_other_io_options(
                     "column",
                     lambda x: list(x.columns),
                 )
@@ -167,7 +167,7 @@ def DropColumnNode(df: pd.DataFrame, column: str) -> pd.DataFrame:
     default_io_options={
         "df": {
             "on": {
-                "after_set_value": fn.decorator.update_other_io(
+                "after_set_value": fn.decorator.update_other_io_options(
                     "row",
                     lambda x: list(x.index),
                 )
@@ -402,7 +402,7 @@ def df_concatenate(df1: pd.DataFrame, df2: pd.DataFrame) -> pd.DataFrame:
     default_io_options={
         "df_left": {
             "on": {
-                "after_set_value": fn.decorator.update_other_io(
+                "after_set_value": fn.decorator.update_other_io_options(
                     "left_on",
                     lambda x: list(x.columns),
                 )
@@ -410,7 +410,7 @@ def df_concatenate(df1: pd.DataFrame, df2: pd.DataFrame) -> pd.DataFrame:
         },
         "df_right": {
             "on": {
-                "after_set_value": fn.decorator.update_other_io(
+                "after_set_value": fn.decorator.update_other_io_options(
                     "right_on",
                     lambda x: list(x.columns),
                 )
@@ -450,6 +450,7 @@ def df_join(
 
 MANIPULATE_SHELF = fn.Shelf(
     nodes=[
+        reset_index,
         dropna,
         fillna,
         bfill,
@@ -466,7 +467,6 @@ MANIPULATE_SHELF = fn.Shelf(
         df_concatenate,
         df_merge,
         df_join,
-        reset_index,
     ],
     name="Manipulation",
     description="DataFrame manipulations",
