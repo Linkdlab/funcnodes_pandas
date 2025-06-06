@@ -19,6 +19,23 @@ def ser_to_dict(
 
 
 @fn.NodeDecorator(
+    node_id="pd.ser_to_df",
+    name="To DataFrame",
+    description="Converts a Series to a DataFrame.",
+    outputs=[{"name": "df", "type": pandas.DataFrame}],
+)
+def ser_to_df(
+    ser: pandas.Series,
+    transposed: bool = True,
+) -> pandas.DataFrame:
+    df = ser.to_frame()
+    if transposed:
+        df = df.transpose()
+
+    return df
+
+
+@fn.NodeDecorator(
     node_id="pd.ser_values",
     name="Get Values",
     description="Gets the values of a Series.",
