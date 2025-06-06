@@ -45,6 +45,13 @@ download = "https://pypi.org/project/funcnodes-pandas/#files"
 [tool.setuptools.package-dir]
 "" = "src"
 
+
+[tool.commitizen]
+name = "cz_conventional_commits"
+tag_format = "v$version"
+version_scheme = "pep440"
+version_provider = "uv"
+update_changelog_on_bump = true
 [project.entry-points."funcnodes.module"]
 module = "funcnodes_pandas"
 shelf = "funcnodes_pandas:NODE_SHELF"
