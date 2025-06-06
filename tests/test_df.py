@@ -156,6 +156,7 @@ class TestDataframeManipulation(unittest.IsolatedAsyncioTestCase):
                 "C": [1.1, 2.2, None],
             }
         )
+        self.df.index.name = "my_index"
 
         self.series = self.df.iloc[0]
 
@@ -314,6 +315,18 @@ class TestDataframeManipulation(unittest.IsolatedAsyncioTestCase):
         await ins
         pd.testing.assert_frame_equal(
             ins.outputs["df"].value, self.df.join(self.df, on="A", rsuffix="_r")
+        )
+
+    async def test_df_reset_index(self):
+        ins = fnpd.df_reset_index()
+        ins.inputs["df"].value = self.df
+        await ins
+        pd.testing.assert_frame_equal(
+            ins.outputs["out"].value, self.df.reset_index(drop=False)
+        )
+        self.assertEqual(
+            ins.outputs["out"].value.columns.tolist(),
+            ["my_index", "A", "B", "C"],
         )
 
 
@@ -488,6 +501,7 @@ class TestDataFrameRowsCols(unittest.IsolatedAsyncioTestCase):
                 "C": [1.1, 2.2, None],
             }
         )
+        self.df.index.name = "my_index"
 
         self.series = self.df.iloc[0]
 
@@ -585,6 +599,13 @@ class TestDataFrameRowsCols(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(
             ins.outputs["out"].value.columns.tolist(), ["_2A", "space_col", "C"]
         )
+
+    async def test_df_get_index(self):
+        ins = fnpd.df_get_index()
+        ins.inputs["df"].value = self.df
+        await ins
+        self.assertEqual(ins.outputs["index"].value.tolist(), self.df.index.tolist())
+        self.assertEqual(ins.outputs["index"].value.name, self.df.index.name)
 
 
 class TestReduceDataFrameNode(unittest.IsolatedAsyncioTestCase):

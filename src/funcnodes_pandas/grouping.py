@@ -12,7 +12,7 @@ from typing import List
     default_io_options={
         "df": {
             "on": {
-                "after_set_value": fn.decorator.update_other_io(
+                "after_set_value": fn.decorator.update_other_io_options(
                     "column",
                     lambda x: list(x.columns),
                 )
@@ -163,7 +163,7 @@ def group_to_list(
     default_io_options={
         "group": {
             "on": {
-                "after_set_value": fn.decorator.update_other_io(
+                "after_set_value": fn.decorator.update_other_io_options(
                     "name",
                     lambda x: list(x.groups.keys()),
                 )

@@ -205,7 +205,7 @@ def from_csv_auto(
     default_io_options={
         "data": {
             "on": {
-                "after_set_value": fn.decorator.update_other_io(
+                "after_set_value": fn.decorator.update_other_io_options(
                     "sheet",
                     lambda x: pd.ExcelFile(BytesIO(x)).sheet_names,
                 )

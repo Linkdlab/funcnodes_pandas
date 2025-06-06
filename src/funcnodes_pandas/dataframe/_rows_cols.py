@@ -14,7 +14,7 @@ from ..utils import to_valid_identifier
     default_io_options={
         "df": {
             "on": {
-                "after_set_value": fn.decorator.update_other_io(
+                "after_set_value": fn.decorator.update_other_io_options(
                     "column",
                     lambda x: list(iter(x)),
                 )
@@ -33,7 +33,7 @@ def GetColumnNode(df: pd.DataFrame, column: str) -> pd.Series:
     default_io_options={
         "df": {
             "on": {
-                "after_set_value": fn.decorator.update_other_io(
+                "after_set_value": fn.decorator.update_other_io_options(
                     "column",
                     lambda x: list(iter(x)),
                 )
@@ -61,7 +61,7 @@ def SetColumnNode(df: pd.DataFrame, column: str, data: Any) -> pd.DataFrame:
     default_io_options={
         "df": {
             "on": {
-                "after_set_value": fn.decorator.update_other_io(
+                "after_set_value": fn.decorator.update_other_io_options(
                     "row",
                     lambda x: list(x.index),
                 )
@@ -93,7 +93,7 @@ def get_rows(
     default_io_options={
         "df": {
             "on": {
-                "after_set_value": fn.decorator.update_other_io(
+                "after_set_value": fn.decorator.update_other_io_options(
                     "row",
                     lambda x: list(x.index),
                 )
@@ -115,9 +115,9 @@ def SetRowNode(df: pd.DataFrame, row: str, data: Any) -> pd.DataFrame:
     default_io_options={
         "df": {
             "on": {
-                "after_set_value": lambda src, result: src.node[
-                    "index"
-                ].update_value_options(min=0, max=len(result) - 1, step=1)
+                "after_set_value": fn.decorator.update_other_io_value_options(
+                    "index", lambda result: dict(min=0, max=len(result) - 1, step=1)
+                )
             }
         },
     },
@@ -152,7 +152,7 @@ def df_ilocs(
     default_io_options={
         "df": {
             "on": {
-                "after_set_value": fn.decorator.update_other_io(
+                "after_set_value": fn.decorator.update_other_io_options(
                     "old_name",
                     lambda x: x.columns.to_list(),
                 )
@@ -186,6 +186,16 @@ def df_rename_cols_valid_identifier(
     )
 
 
+@fn.NodeDecorator(
+    node_id="pd.df_get_index",
+    name="Get Index",
+    description="Gets the index of a DataFrame as a Series.",
+    outputs=[{"name": "index"}],
+)
+def df_get_index(df: pd.DataFrame) -> pd.Series:
+    return df.index.to_series()
+
+
 ROW_COLS_SHELF = fn.Shelf(
     nodes=[
         GetColumnNode,
@@ -197,6 +207,7 @@ ROW_COLS_SHELF = fn.Shelf(
         df_ilocs,
         df_rename_col,
         df_rename_cols_valid_identifier,
+        df_get_index,
     ],
     name="Rows and Columns",
     description="OPeration on rows and columns",

@@ -58,6 +58,8 @@ from .dataframe import (
     df_describe,
     df_value_counts,
     df_eval,
+    df_get_index,
+    df_reset_index,
     # end math
 )
 
@@ -198,6 +200,8 @@ __all__ = [
     "add_row",
     "df_describe",
     "df_merge",
+    "df_reset_index",
+    "df_get_index",
     "filter",
     "set_column",
     "set_row",

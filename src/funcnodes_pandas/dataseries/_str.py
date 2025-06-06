@@ -262,7 +262,7 @@ def ser_str_swapcase(series: pd.Series) -> pd.Series:
     default_io_options={
         "series": {
             "on": {
-                "after_set_value": fn.decorator.update_other_io(
+                "after_set_value": fn.decorator.update_other_io_options(
                     "others",
                     lambda x: list(iter(x)),
                 )
