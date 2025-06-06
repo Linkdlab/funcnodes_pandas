@@ -6,6 +6,28 @@ import numpy as np
 
 
 @fn.NodeDecorator(
+    node_id="pd.reset_index",
+    name="Reset Index",
+    description="Resets the index of a DataFrame.",
+)
+def reset_index(
+    df: pd.DataFrame,
+    drop: bool = False,
+) -> pd.DataFrame:
+    """
+    Resets the index of a DataFrame.
+
+    Parameters:
+    - df: pandas DataFrame
+    - drop: bool, if True, the old index is not added as a column
+
+    Returns:
+    - A new DataFrame with the index reset or modifies the original DataFrame in place
+    """
+    return df.reset_index(drop=drop)
+
+
+@fn.NodeDecorator(
     node_id="pd.dropna",
     name="Drop NA",
     description="Drops rows or columns with NA values.",
@@ -29,7 +51,7 @@ def dropna(
 )
 def fillna(
     df: pd.DataFrame,
-    value: Union[str, int, float] = 0,
+    value: Union[int, float, str] = 0,
 ) -> pd.DataFrame:
     return df.fillna(value)
 
@@ -311,12 +333,16 @@ def reduce_df(
     description="Adds a column from a DataFrame.",
 )
 def add_column(
-    df: pd.DataFrame,
     column: str,
     data: Any,
+    df: Optional[pd.DataFrame] = None,
 ) -> pd.DataFrame:
-    df = df.copy()
-    df[column] = data
+    if df is not None:
+        df = df.copy()
+        df[column] = data
+    else:
+        df = pd.DataFrame({column: data})
+
     return df
 
 
@@ -326,9 +352,18 @@ def add_column(
     description="Adds a row to a DataFrame.",
 )
 def add_row(
-    df: pd.DataFrame,
-    row: Union[dict, list],
+    row: Union[dict, list, pd.Series],
+    df: Optional[pd.DataFrame] = None,
 ) -> pd.DataFrame:
+    if isinstance(row, pd.Series):
+        if df is None:
+            return pd.DataFrame([row])
+        elif len(row) != len(df.columns):
+            raise ValueError(
+                "Row must have the same number of columns as the DataFrame"
+            )
+        df = pd.concat([df, row.to_frame().T])
+        return df
     if not isinstance(row, dict):
         try:
             row = {c: row[c] for c in df.columns}
@@ -339,7 +374,10 @@ def add_row(
                 "Row must have the same number of columns as the DataFrame"
             )
         row = {c: [v] for c, v in zip(df.columns, row)}
-    df = pd.concat([df, pd.DataFrame(row)])
+    if df is None:
+        df = pd.DataFrame(row)
+    else:
+        df = pd.concat([df, pd.DataFrame(row)])
     return df
 
 
@@ -428,6 +466,7 @@ MANIPULATE_SHELF = fn.Shelf(
         df_concatenate,
         df_merge,
         df_join,
+        reset_index,
     ],
     name="Manipulation",
     description="DataFrame manipulations",
