@@ -2,6 +2,8 @@
 
 ### Feat
 
+- **dataframe**: ✨ add `df_reset_index` and `df_get_index` functions
+- **rows**: ✨ add `get_index` function to retrieve DataFrame index
 - **manipulation**: ✨ add `reset_index` function to reset DataFrame index
 - **dataseries**: ✨ add `ser_to_df` function to convert Series to DataFrame
 
