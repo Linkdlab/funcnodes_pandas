@@ -32,6 +32,7 @@ from ._manipulation import (  # noqa: F401
     df_concatenate,
     df_merge,
     df_join,
+    df_reset_index,
     MANIPULATE_SHELF,
 )
 from ._math import (  # noqa: F401
@@ -60,6 +61,7 @@ from ._rows_cols import (  # noqa: F401
     df_rename_col,
     df_rename_cols_valid_identifier,
     ROW_COLS_SHELF,
+    df_get_index,
 )
 from ._masking import (  # noqa: F401
     filter,

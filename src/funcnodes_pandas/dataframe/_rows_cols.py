@@ -187,12 +187,12 @@ def df_rename_cols_valid_identifier(
 
 
 @fn.NodeDecorator(
-    node_id="pd.get_index",
+    node_id="pd.df_get_index",
     name="Get Index",
     description="Gets the index of a DataFrame as a Series.",
     outputs=[{"name": "index"}],
 )
-def get_index(df: pd.DataFrame) -> pd.Series:
+def df_get_index(df: pd.DataFrame) -> pd.Series:
     return df.index.to_series()
 
 
@@ -207,7 +207,7 @@ ROW_COLS_SHELF = fn.Shelf(
         df_ilocs,
         df_rename_col,
         df_rename_cols_valid_identifier,
-        get_index,
+        df_get_index,
     ],
     name="Rows and Columns",
     description="OPeration on rows and columns",

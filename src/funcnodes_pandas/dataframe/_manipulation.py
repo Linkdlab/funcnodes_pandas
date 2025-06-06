@@ -6,11 +6,11 @@ import numpy as np
 
 
 @fn.NodeDecorator(
-    node_id="pd.reset_index",
+    node_id="pd.df_reset_index",
     name="Reset Index",
     description="Resets the index of a DataFrame.",
 )
-def reset_index(
+def df_reset_index(
     df: pd.DataFrame,
     drop: bool = False,
 ) -> pd.DataFrame:
@@ -450,7 +450,7 @@ def df_join(
 
 MANIPULATE_SHELF = fn.Shelf(
     nodes=[
-        reset_index,
+        df_reset_index,
         dropna,
         fillna,
         bfill,
