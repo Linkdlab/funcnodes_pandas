@@ -1,6 +1,6 @@
 [project]
 name = "funcnodes-pandas"
-version = "0.3.0"
+version = "0.4.0"
 description = "pandas nodes for funcnodes"
 readme = "README.md"
 classifiers = [
