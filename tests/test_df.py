@@ -607,6 +607,31 @@ class TestDataFrameRowsCols(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(ins.outputs["index"].value.tolist(), self.df.index.tolist())
         self.assertEqual(ins.outputs["index"].value.name, self.df.index.name)
 
+    async def test_get_column_names(self):
+        ins = fnpd.get_column_names()
+        ins.inputs["df"].value = self.df
+        await ins
+        self.assertEqual(ins.outputs["columns"].value, self.df.columns.tolist())
+
+    async def test_get_columns_by_names(self):
+        ins = fnpd.get_columns_by_names()
+        ins.inputs["df"].value = self.df
+        ins.inputs["columns"].value = "A, B"
+        await ins
+        pd.testing.assert_frame_equal(ins.outputs["subdf"].value, self.df[["A", "B"]])
+
+    async def test_get_columns_by_index(self):
+        ins = fnpd.get_columns_by_index()
+        ins.inputs["df"].value = self.df
+        ins.inputs["index"].value = 1
+        await ins
+        pd.testing.assert_series_equal(ins.outputs["series"].value, self.df.iloc[:, 1])
+
+        #    get_column_names,
+
+    # get_columns_by_names,
+    # get_columns_by_index,
+
 
 class TestReduceDataFrameNode(unittest.IsolatedAsyncioTestCase):
     def setUp(self) -> None:

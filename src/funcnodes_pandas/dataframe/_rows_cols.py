@@ -47,6 +47,68 @@ def SetColumnNode(df: pd.DataFrame, column: str, data: Any) -> pd.DataFrame:
     return df
 
 
+@fn.NodeDecorator(
+    node_id="pd.get_columns",
+    name="Get Columns",
+    description="Get the names of the columns in a DataFrame.",
+    outputs=[{"name": "columns"}],
+)
+def get_column_names(
+    df: pd.DataFrame,
+) -> List[str]:
+    """
+    Gets multiple columns from a DataFrame.
+    """
+    return list(df.columns)
+
+
+@fn.NodeDecorator(
+    node_id="pd.get_columns_by_names",
+    name="Get Columns by Names",
+    description="Gets multiple columns from a DataFrame by names.",
+    outputs=[{"name": "subdf", "type": pd.DataFrame}],
+)
+def get_columns_by_names(
+    df: pd.DataFrame,
+    columns: List[str],
+) -> pd.DataFrame:
+    """
+    Gets multiple columns from a DataFrame by names.
+    """
+    if isinstance(columns, str):
+        columns = columns.split(",")
+    columns = [col.strip() for col in columns]
+    return df[columns]
+
+
+@fn.NodeDecorator(
+    node_id="pd.get_columns_by_index",
+    name="Gets a Columns by its Index",
+    description="Gets a column from a DataFrame by its index.",
+    outputs=[{"name": "series"}],
+    default_io_options={
+        "df": {
+            "on": {
+                "after_set_value": fn.decorator.update_other_io_value_options(
+                    "index",
+                    lambda result: dict(min=0, max=len(result.columns) - 1, step=1),
+                )
+            }
+        },
+    },
+)
+def get_columns_by_index(
+    df: pd.DataFrame,
+    index: int = 0,
+) -> pd.Series:
+    """
+    Gets a column from a DataFrame by its index.
+    """
+    if index < 0 or index >= len(df.columns):
+        raise IndexError("Index out of bounds for DataFrame columns.")
+    return df[df.columns[int(index)]].copy()
+
+
 # endregion cols
 
 
@@ -202,6 +264,9 @@ ROW_COLS_SHELF = fn.Shelf(
         SetColumnNode,
         GetRowNode,
         SetRowNode,
+        get_column_names,
+        get_columns_by_names,
+        get_columns_by_index,
         df_iloc,
         get_rows,
         df_ilocs,
