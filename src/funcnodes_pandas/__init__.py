@@ -13,6 +13,9 @@ from .dataframe import (
     from_csv_auto,
     GetColumnNode as get_column,
     SetColumnNode as set_column,
+    get_column_names,
+    get_columns_by_names,
+    get_columns_by_index,
     to_orient_dict,
     from_orient_dict,
     df_iloc,
@@ -156,7 +159,7 @@ FUNCNODES_RENDER_OPTIONS: fn.RenderOptions = {
     },
 }
 
-__version__ = "0.2.12"
+__version__ = "0.4.0"
 
 __all__ = [
     "display_df",
@@ -205,6 +208,9 @@ __all__ = [
     "filter",
     "set_column",
     "set_row",
+    "get_column_names",
+    "get_columns_by_names",
+    "get_columns_by_index",
     "mask",
     "df_cov",
     "df_quantile",
