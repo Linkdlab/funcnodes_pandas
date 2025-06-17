@@ -1,3 +1,9 @@
+## v0.4.0 (2025-06-17)
+
+### Feat
+
+- **dataframe**: ✨ add functions to retrieve column names and data
+
 ## v0.3.0 (2025-06-06)
 
 ### Feat
