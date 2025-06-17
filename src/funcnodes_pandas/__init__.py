@@ -159,7 +159,7 @@ FUNCNODES_RENDER_OPTIONS: fn.RenderOptions = {
     },
 }
 
-__version__ = "0.2.12"
+__version__ = "0.4.0"
 
 __all__ = [
     "display_df",
