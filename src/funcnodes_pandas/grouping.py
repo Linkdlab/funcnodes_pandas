@@ -23,24 +23,26 @@ from typing import List
 def GroupByColumnNode(
     df: pd.DataFrame,
     column: str,
+    as_index: bool = True,
 ) -> pd.Series:
     df = df.copy()
-    return df.groupby(column)
+    return df.groupby(column, as_index=as_index)
 
 
 @fn.NodeDecorator(
     node_id="pd.gr.groupby",
     name="Group By",
-    description="Groups a DataFrame by a column.",
+    description="Groups a DataFrame by a list of columns (comma separated)",
     outputs=[{"name": "grouped", "type": pd.DataFrame}],
 )
 def group_by(
     df: pd.DataFrame,
     by: str,
+    as_index: bool = True,
 ) -> DataFrameGroupBy:
     sep = [s.strip() for s in by.split(",")]
     df = df.copy()
-    return df.groupby(sep)
+    return df.groupby(sep, as_index=as_index)
 
 
 @fn.NodeDecorator(
@@ -51,7 +53,10 @@ def group_by(
 )
 def gr_mean(
     group: DataFrameGroupBy,
+    transform: bool = False,
 ) -> pd.DataFrame:
+    if transform:
+        return group.transform("mean")
     return group.mean()
 
 
@@ -63,7 +68,10 @@ def gr_mean(
 )
 def gr_sum(
     group: DataFrameGroupBy,
+    transform: bool = False,
 ) -> pd.DataFrame:
+    if transform:
+        return group.transform("sum")
     return group.sum()
 
 
@@ -75,7 +83,10 @@ def gr_sum(
 )
 def gr_max(
     group: DataFrameGroupBy,
+    transform: bool = False,
 ) -> pd.DataFrame:
+    if transform:
+        return group.transform("max")
     return group.max()
 
 
@@ -87,7 +98,10 @@ def gr_max(
 )
 def gr_min(
     group: DataFrameGroupBy,
+    transform: bool = False,
 ) -> pd.DataFrame:
+    if transform:
+        return group.transform("min")
     return group.min()
 
 
@@ -99,7 +113,10 @@ def gr_min(
 )
 def gr_std(
     group: DataFrameGroupBy,
+    transform: bool = False,
 ) -> pd.DataFrame:
+    if transform:
+        return group.transform("std")
     return group.std()
 
 
@@ -111,7 +128,10 @@ def gr_std(
 )
 def gr_var(
     group: DataFrameGroupBy,
+    transform: bool = False,
 ) -> pd.DataFrame:
+    if transform:
+        return group.transform("var")
     return group.var()
 
 
@@ -123,8 +143,86 @@ def gr_var(
 )
 def gr_count(
     group: DataFrameGroupBy,
+    transform: bool = False,
 ) -> pd.DataFrame:
+    if transform:
+        return group.transform("count")
     return group.count()
+
+
+@fn.NodeDecorator(
+    node_id="pd.gr.median",
+    name="Median",
+    description="Calculates the median of a DataFrameGroup.",
+    outputs=[{"name": "median", "type": pd.DataFrame}],
+)
+def gr_median(
+    group: DataFrameGroupBy,
+    transform: bool = False,
+) -> pd.DataFrame:
+    if transform:
+        return group.transform("median")
+    return group.median()
+
+
+@fn.NodeDecorator(
+    node_id="pd.gr.sem",
+    name="Standard Error of Mean",
+    description="Calculates the standard error of mean of a DataFrameGroup.",
+    outputs=[{"name": "sem", "type": pd.DataFrame}],
+)
+def gr_sem(
+    group: DataFrameGroupBy,
+    transform: bool = False,
+) -> pd.DataFrame:
+    if transform:
+        return group.transform("sem")
+    return group.sem()
+
+
+@fn.NodeDecorator(
+    node_id="pd.gr.nunique",
+    name="Number of Unique Values",
+    description="Calculates the number of unique values of a DataFrameGroup.",
+    outputs=[{"name": "nunique", "type": pd.DataFrame}],
+)
+def gr_nunique(
+    group: DataFrameGroupBy,
+    transform: bool = False,
+) -> pd.DataFrame:
+    if transform:
+        return group.transform("nunique")
+    return group.nunique()
+
+
+@fn.NodeDecorator(
+    node_id="pd.gr.first",
+    name="First",
+    description="Calculates the first non-NA value in a DataFrameGroup.",
+    outputs=[{"name": "first", "type": pd.DataFrame}],
+)
+def gr_first(
+    group: DataFrameGroupBy,
+    transform: bool = False,
+) -> pd.DataFrame:
+    if transform:
+        return group.transform("first")
+    return group.first()
+
+
+@fn.NodeDecorator(
+    node_id="pd.gr.last",
+    name="Last",
+    description="Calculates the last non-NA value in a DataFrameGroup.",
+    outputs=[{"name": "last", "type": pd.DataFrame}],
+)
+def gr_last(
+    group: DataFrameGroupBy,
+    transform: bool = False,
+) -> pd.DataFrame:
+    if transform:
+        return group.transform("last")
+    return group.last()
 
 
 @fn.NodeDecorator(
@@ -193,6 +291,11 @@ NODE_SHELF = fn.Shelf(
         gr_describe,
         group_to_list,
         GetDFfromGroupNode,
+        gr_median,
+        gr_sem,
+        gr_nunique,
+        gr_first,
+        gr_last,
     ],
     name="Grouping",
     description="Pandas grouping nodes",
