@@ -59,6 +59,7 @@ def gr_mean(
         return group.transform("mean")
     return group.mean()
 
+
 @fn.NodeDecorator(
     node_id="pd.gr.sum",
     name="Sum",
@@ -102,7 +103,6 @@ def gr_min(
     if transform:
         return group.transform("min")
     return group.min()
-
 
 
 @fn.NodeDecorator(
@@ -149,6 +149,7 @@ def gr_count(
         return group.transform("count")
     return group.count()
 
+
 @fn.NodeDecorator(
     node_id="pd.gr.median",
     name="Median",
@@ -162,6 +163,7 @@ def gr_median(
     if transform:
         return group.transform("median")
     return group.median()
+
 
 @fn.NodeDecorator(
     node_id="pd.gr.sem",
@@ -177,6 +179,7 @@ def gr_sem(
         return group.transform("sem")
     return group.sem()
 
+
 @fn.NodeDecorator(
     node_id="pd.gr.nunique",
     name="Number of Unique Values",
@@ -191,6 +194,7 @@ def gr_nunique(
         return group.transform("nunique")
     return group.nunique()
 
+
 @fn.NodeDecorator(
     node_id="pd.gr.first",
     name="First",
@@ -204,6 +208,7 @@ def gr_first(
     if transform:
         return group.transform("first")
     return group.first()
+
 
 @fn.NodeDecorator(
     node_id="pd.gr.last",
