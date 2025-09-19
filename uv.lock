@@ -423,15 +423,15 @@ wheels = [
 
 [[package]]
 name = "exposedfunctionality"
-version = "0.3.20"
+version = "1.0.2"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "pyyaml" },
     { name = "typing-extensions" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/14/2d/293b8dd4a8d021736e3f8c2fe11d44050998886da0cab3f4b8c90b746443/exposedfunctionality-0.3.20.tar.gz", hash = "sha256:f45bfc747177a9306c2c53893818910b32e264246a961ad605202d37bcdbf674", size = 23887, upload-time = "2025-02-24T12:23:22.874Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/b9/e2/b46eec09792009ccee3fa3d8fba3540be1478655612fae8ba3f6f1b871ca/exposedfunctionality-1.0.2.tar.gz", hash = "sha256:6d4a55223041ef91d955d8016c2afbbcedb8e70fd1fdec76dfe69073d9da6f79", size = 68056, upload-time = "2025-09-03T09:38:58.119Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/e2/f9/4b440f7a6592d4f94e4eb084aff7ec4025e8f86292ab4633d6499766252c/exposedfunctionality-0.3.20-py3-none-any.whl", hash = "sha256:aa009389ebf7230493f2b960acd2d5142145eae9fc8f2f679bca9eaa8d1e53c1", size = 27090, upload-time = "2025-02-24T12:23:21.374Z" },
+    { url = "https://files.pythonhosted.org/packages/5f/42/111fdd98410f4cc3c2bcb8cf1e92132f214dc5872b52db5ec84ccf7d16ba/exposedfunctionality-1.0.2-py3-none-any.whl", hash = "sha256:6a58bbd700044a80b11b4fbeaf4458fd034f455847be9036718d9238574d0bc5", size = 28831, upload-time = "2025-09-03T09:38:57.051Z" },
 ]
 
 [[package]]
@@ -535,7 +535,7 @@ wheels = [
 
 [[package]]
 name = "funcnodes"
-version = "0.5.37"
+version = "1.0.2"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "funcnodes-basic" },
@@ -549,9 +549,9 @@ dependencies = [
     { name = "venvmngr", marker = "sys_platform != 'emscripten'" },
     { name = "virtualenv", marker = "sys_platform != 'emscripten'" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/73/06/1214ad0928455311cae3972b5fb5154a6e1131fac1cfbf1b4ac52adff251/funcnodes-0.5.37.tar.gz", hash = "sha256:3e8d16d744124a167d7d9d2fd3d7f034a2fc753a766d452fda69f65e368dffd9", size = 42099, upload-time = "2025-03-28T17:01:42.295Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/44/81/c8e2b953391c92886628505549a79ee7be3374b72fb7fe7eab941474f589/funcnodes-1.0.2.tar.gz", hash = "sha256:17dade10230a6cefb02115757f248b7c5063ffd214da925b9b2c7228cd598ba2", size = 10539918, upload-time = "2025-09-03T11:56:08.917Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/04/05/d4e2504aaeccfba16687cf8fb6efdd55080a35b368c3ee704b5a0c44265b/funcnodes-0.5.37-py3-none-any.whl", hash = "sha256:6abfbd293e9859ff0586a04b906645f2920bc4b1d9e8ac06dfbab2347a58b32f", size = 38858, upload-time = "2025-03-28T17:01:40.343Z" },
+    { url = "https://files.pythonhosted.org/packages/bb/d9/0f056789481aa92a7d286a80a2efc6db81ff7043ebe7db477da48fb310b6/funcnodes-1.0.2-py3-none-any.whl", hash = "sha256:eb71c48ae2480016598136880364223cd62e848d4f0e20a3237908514ce5decd", size = 39311, upload-time = "2025-09-03T11:56:07.049Z" },
 ]
 
 [[package]]
@@ -569,7 +569,7 @@ wheels = [
 
 [[package]]
 name = "funcnodes-core"
-version = "0.4.1"
+version = "1.0.5"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "dill" },
@@ -578,9 +578,9 @@ dependencies = [
     { name = "setuptools" },
     { name = "tqdm" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/63/4e/5e14ba6b5e5b539a37329a0f8b44ee463dda0587bb5f55baad4f71aefc16/funcnodes_core-0.4.1.tar.gz", hash = "sha256:d954d1729cb43591bc6c5efbd1768ccbc979559f50750373ef79f93e47164cd7", size = 97954, upload-time = "2025-06-05T13:00:11.102Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/ee/7b/2dae3ae4536dd4bad23db1b622dce43987d0fcfb2f5fd8e69c3020233904/funcnodes_core-1.0.5.tar.gz", hash = "sha256:b63e1c557b5f10f8433352a4f11840fe0023f777d2090cb0c1026e13ff217589", size = 177383, upload-time = "2025-09-16T13:35:00.864Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/f1/af/dee807deb019d3ad52c4d7957790b654cd3cf75dbe3144ff4f226aeae4b1/funcnodes_core-0.4.1-py3-none-any.whl", hash = "sha256:27f65a9dd4bf0c200e8d011b926df7daa69b82417a3803c7771fe7646434c100", size = 85483, upload-time = "2025-06-05T13:00:09.248Z" },
+    { url = "https://files.pythonhosted.org/packages/c1/a5/8755fa71c7f439aa1b1a25eddc4db4a28c1cf8235a24877cf35a9f95c25f/funcnodes_core-1.0.5-py3-none-any.whl", hash = "sha256:a0a0300d0c9d8d550ab36f837cff301a98efc155f3f993415adfb975f9dcfe14", size = 89278, upload-time = "2025-09-16T13:34:59.533Z" },
 ]
 
 [[package]]
@@ -612,7 +612,7 @@ wheels = [
 
 [[package]]
 name = "funcnodes-pandas"
-version = "0.4.0"
+version = "1.0.0"
 source = { editable = "." }
 dependencies = [
     { name = "chardet" },
@@ -635,7 +635,7 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "chardet" },
-    { name = "funcnodes" },
+    { name = "funcnodes", specifier = ">=1.0.0" },
     { name = "funcnodes-numpy" },
     { name = "openpyxl" },
     { name = "pandas" },
@@ -653,30 +653,30 @@ dev = [
 
 [[package]]
 name = "funcnodes-react-flow"
-version = "0.4.11"
+version = "1.0.2"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "funcnodes", marker = "sys_platform != 'emscripten'" },
     { name = "funcnodes-core", marker = "sys_platform != 'emscripten'" },
     { name = "funcnodes-worker", marker = "sys_platform != 'emscripten'" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/70/33/c35c9ed4c1c32b466e2ca3ffb8ab097774b54749e93adb76e7f1d2ef496d/funcnodes_react_flow-0.4.11.tar.gz", hash = "sha256:3d0f4b228e70a93028b17047448c934b3505554d31d7e411e3daf64d16e1f30a", size = 1459885, upload-time = "2025-05-16T11:03:51.251Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/43/7a/f1d41a00d25c7ee863e0182835f61b9bef6ae8f27695eab4fbb9f78aab73/funcnodes_react_flow-1.0.2.tar.gz", hash = "sha256:b0bf3a8a6b9e039f7f40d501a36b8c994cc1b01e244812cee640ba763e05467f", size = 1957934, upload-time = "2025-09-12T09:48:15.345Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/24/e3/9148b82a108936a5fc18c92de46099f39109cd607f20cdb72e3f14045b93/funcnodes_react_flow-0.4.11-py3-none-any.whl", hash = "sha256:79cb4863f33443d22956c872a67b123222135c5050f44aeed5c33190442bdb10", size = 1467694, upload-time = "2025-05-16T11:03:48.85Z" },
+    { url = "https://files.pythonhosted.org/packages/cd/5f/2f6ec339eaa247078fcdcf1110706b1d42d89c19df6074f608f14e41adee/funcnodes_react_flow-1.0.2-py3-none-any.whl", hash = "sha256:0ac1a80a60515d4e21d653204fe5dc46fbf69dfc032a1e97c6023a69e5f53c8a", size = 1202217, upload-time = "2025-09-12T09:48:13.275Z" },
 ]
 
 [[package]]
 name = "funcnodes-worker"
-version = "0.3.2"
+version = "1.0.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "asynctoolkit" },
     { name = "funcnodes-core" },
     { name = "pip" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/b2/32/d49143428be513b6e4041c7d33974280e84f60f3fcbfe35c59f6f41cf140/funcnodes_worker-0.3.2.tar.gz", hash = "sha256:b8f88e29aa6c5ee0c62bed7711f99c1f343ca40ce73cf1a4d740033d436f8919", size = 49744, upload-time = "2025-06-04T22:53:30.286Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/86/1c/d072c3062feb4ef9d7baf569fffae577afd698605fdd50a6bc93d7353219/funcnodes_worker-1.0.0.tar.gz", hash = "sha256:ea7dd46e08056b6ee081ce4992a61ade0a1c9ef43ca4394b3316d95452f38678", size = 111859, upload-time = "2025-08-29T11:43:22.232Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/2e/e3/e7f95bf021c04253af20ae7869f17b341f4f0c25ef9766322ceb288259a0/funcnodes_worker-0.3.2-py3-none-any.whl", hash = "sha256:598b44b5ba66f2a3e77c24c5d218439b11cad15e426d7c4f03c1a3eb94ce7497", size = 47516, upload-time = "2025-06-04T22:53:28.585Z" },
+    { url = "https://files.pythonhosted.org/packages/59/56/d2ed23ca81d25fa8ecf6c0bf4ea9d7157991ad654baf9bd00c143a73fddd/funcnodes_worker-1.0.0-py3-none-any.whl", hash = "sha256:9176c287222897f200c0f13040c4b617446d579cf1c62867bc246bbb74897a39", size = 47648, upload-time = "2025-08-29T11:43:20.734Z" },
 ]
 
 [package.optional-dependencies]
@@ -1653,15 +1653,15 @@ wheels = [
 
 [[package]]
 name = "subprocess-monitor"
-version = "0.2.6"
+version = "0.3.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "aiohttp", marker = "sys_platform != 'emscripten'" },
     { name = "psutil", marker = "sys_platform != 'emscripten'" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/bd/7c/7aa525e96ada762c91e0cfeb7baf67bde57296e9f526c00f69a74c8e8fd9/subprocess_monitor-0.2.6.tar.gz", hash = "sha256:7196df2cc1ac4f952b4dcae798ab81f9544f1535d7c77862a3fa99c30f9ee28d", size = 7494, upload-time = "2025-02-13T09:24:21.849Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/47/e1/1034846227a49627f1fc3a74367de16321970f7de72aebcca7660552e1b7/subprocess_monitor-0.3.0.tar.gz", hash = "sha256:5a11eb91777e1f8b2e558076cca79bbed62591824eb7e90a72b4944ebee5584d", size = 97265, upload-time = "2025-07-15T22:23:35.909Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/34/df/19b5352ca01a32453df7a8d70bd03c1b9a1d61461304e646f42a2d21f748/subprocess_monitor-0.2.6-py3-none-any.whl", hash = "sha256:32ff513f791fcead57e1deee9bf8acf263db0b064c8e03c223555f6e3eeef22e", size = 9772, upload-time = "2025-02-13T09:24:19.937Z" },
+    { url = "https://files.pythonhosted.org/packages/52/57/979ab56e413c0c1523370cb96e7118cdca9c8a891ac7dd5ad7eeabfb3da0/subprocess_monitor-0.3.0-py3-none-any.whl", hash = "sha256:0b6aae269beabf523d85ee2e1b9c64558c73ea9469eefc7c20b465c29fed7399", size = 19698, upload-time = "2025-07-15T22:23:34.359Z" },
 ]
 
 [[package]]
