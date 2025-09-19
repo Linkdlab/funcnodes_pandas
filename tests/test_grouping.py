@@ -117,3 +117,43 @@ class TestGrouping(unittest.IsolatedAsyncioTestCase):
         pd.testing.assert_frame_equal(
             ins.outputs["description"].value, self.df.groupby("A").describe()
         )
+
+    async def test_median(self):
+        ins = fnpd.gr_median()
+        ins.inputs["group"].value = self.df.groupby("A")
+        await ins
+        pd.testing.assert_frame_equal(
+            ins.outputs["median"].value, self.df.groupby("A").median()
+        )
+
+    async def test_sem(self):
+        ins = fnpd.gr_sem()
+        ins.inputs["group"].value = self.df.groupby("A")
+        await ins
+        pd.testing.assert_frame_equal(
+            ins.outputs["sem"].value, self.df.groupby("A").sem()
+        )
+
+    async def test_nunique(self):
+        ins = fnpd.gr_nunique()
+        ins.inputs["group"].value = self.df.groupby("A")
+        await ins
+        pd.testing.assert_frame_equal(
+            ins.outputs["nunique"].value, self.df.groupby("A").nunique()
+        )
+
+    async def test_first(self):
+        ins = fnpd.gr_first()
+        ins.inputs["group"].value = self.df.groupby("A")
+        await ins
+        pd.testing.assert_frame_equal(
+            ins.outputs["first"].value, self.df.groupby("A").first()
+        )
+
+    async def test_last(self):
+        ins = fnpd.gr_last()
+        ins.inputs["group"].value = self.df.groupby("A")
+        await ins
+        pd.testing.assert_frame_equal(
+            ins.outputs["last"].value, self.df.groupby("A").last()
+        )

@@ -113,6 +113,11 @@ from .grouping import (
     gr_std,
     gr_var,
     gr_count,
+    gr_median,
+    gr_sem,
+    gr_nunique,
+    gr_first,
+    gr_last,
     gr_describe,
     group_to_list,
     GetDFfromGroupNode as get_df_from_group,
@@ -159,7 +164,7 @@ FUNCNODES_RENDER_OPTIONS: fn.RenderOptions = {
     },
 }
 
-__version__ = "0.4.0"
+__version__ = "1.0.0"
 
 __all__ = [
     "display_df",
@@ -278,6 +283,11 @@ __all__ = [
     "gr_std",
     "gr_var",
     "gr_count",
+    "gr_median",
+    "gr_sem",
+    "gr_nunique",
+    "gr_first",
+    "gr_last",
     "gr_describe",
     "group_to_list",
     "group_by_column",
