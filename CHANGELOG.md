@@ -1,3 +1,9 @@
+## v1.0.0 (2025-09-19)
+
+### Feat
+
+- **grouping**: add transformation support for aggregation functions
+- **grouping**: add new aggregation functions and support for `as_index` parameter
 ## v0.4.0 (2025-06-17)
 
 ### Feat
