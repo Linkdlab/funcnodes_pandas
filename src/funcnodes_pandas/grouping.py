@@ -23,24 +23,26 @@ from typing import List
 def GroupByColumnNode(
     df: pd.DataFrame,
     column: str,
+    as_index: bool = True,
 ) -> pd.Series:
     df = df.copy()
-    return df.groupby(column)
+    return df.groupby(column, as_index=as_index)
 
 
 @fn.NodeDecorator(
     node_id="pd.gr.groupby",
     name="Group By",
-    description="Groups a DataFrame by a column.",
+    description="Groups a DataFrame by a list of columns (comma separated)",
     outputs=[{"name": "grouped", "type": pd.DataFrame}],
 )
 def group_by(
     df: pd.DataFrame,
     by: str,
+    as_index: bool = True,
 ) -> DataFrameGroupBy:
     sep = [s.strip() for s in by.split(",")]
     df = df.copy()
-    return df.groupby(sep)
+    return df.groupby(sep, as_index=as_index)
 
 
 @fn.NodeDecorator(
